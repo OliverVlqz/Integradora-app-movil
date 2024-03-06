@@ -18,7 +18,7 @@ export default function Rooms() {
                     <Text style={styles.text}>Habitaciones</Text>
                 </View>
             </View>
-            <ScrollView style={styles.scrollView}>
+            <ScrollView style={[styles.scrollView, { paddingHorizontal: 12 }]}>
             <View style={styles.row}>
                 <Image
                     source={{ uri: 'https://placehold.co/150x150' }}

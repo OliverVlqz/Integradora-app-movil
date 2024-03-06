@@ -19,7 +19,7 @@ export default function Spa() {
                     <Text style={styles.text}>Paquetes Spa</Text>
                 </View>
             </View>
-            <ScrollView style={styles.scrollView}>
+            <ScrollView style={[styles.scrollView, { paddingHorizontal: 12 }]}>
             <View style={styles.row}>
                 <Image
                     source={{ uri: 'https://placehold.co/150x150' }}

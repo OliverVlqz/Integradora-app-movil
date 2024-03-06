@@ -9,6 +9,8 @@ import Restaurant from "../../modules/restaurant/Restaurant.jsx"
 import Spa from "../../modules/spa/Spa.jsx"
 import Rooms from "../../modules/rooms/Rooms.jsx"
 import Logo from "../../../assets/Logo.png"
+import HomeStack from '../../modules/stack/HomeStack.jsx'
+import {Icon} from '@rneui/base'
 
 
 const Tab = createBottomTabNavigator();
@@ -28,49 +30,62 @@ const CustomHeaderTitle = ({ title }) => {
 export default function Navigation() {
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: '#7E8D56',
-          },
-        }}
-      >
+<Tab.Navigator
+  screenOptions={({ route }) => ({
+    tabBarIcon: ({ focused, color, size }) => {
+        const { iconName, iconType } = getIconName(route.name, focused);
+        // Retornar un Icon de React Native Elements
+        return <Icon name={iconName} type={iconType} size={size} color={color} />;
+    },
+    tabBarActiveTintColor: '#7E8D56',
+    tabBarInactiveTintColor: 'gray',
+    headerShown: false,
+    headerStyle: {
+      backgroundColor: '#7E8D56',
+    },
+  })}
+>
+
         <Tab.Screen name="Login"
           component={Login}
           options={{ title: "Inicio de sesión" }}
-        />
+        />  
 
         <Tab.Screen name='CreateAccount'
           component={CreateAccount}
           options={{ title: "Crea tu cuenta" }}
         />
 
-        <Tab.Screen name='Rooms'
-          component={Rooms}
-          options={{ title: "Habitaciones" }}
-        />
-
         <Tab.Screen
-          name="Home"
-          component={Home}
+          name="HomeStack"
+          component={HomeStack}
           options={{
             headerTitle: props => <CustomHeaderTitle title="Real del Valle" />,
-            headerTitleAlign: 'center'
+            headerTitleAlign: 'center',
+            title: "Inicio"
           }}
         />
-
-        <Tab.Screen name='Restaurant'
-          component={Restaurant}
-          options={{ title: "Restaurantes" }}
-        />
-
-        <Tab.Screen name='Spa'
-          component={Spa}
-          options={{ title: "Paquetes de Spa" }}
-        />
-
 
       </Tab.Navigator>
     </NavigationContainer>
   )
 }
+
+const getIconName = (routeName, focused) =>{
+  let iconName ='';
+  let iconType = 'material-community';
+
+    switch (routeName) {
+        case 'HomeStack':
+            iconName = focused ? 'home' : 'home';
+            break;
+        case 'CreateAccount':
+            iconName = focused ? 'account' : 'account-outline';
+            break;
+        case 'Login':
+            iconName = focused ? 'login' : 'login';
+            break;
+    }
+
+    return { iconName, iconType };
+};
