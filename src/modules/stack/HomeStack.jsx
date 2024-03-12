@@ -5,6 +5,7 @@ import Restaurant from '../../modules/restaurant/Restaurant'
 import Spa from '../../modules/spa/Spa.jsx'
 import Miscellaneous from '../../modules/miscellaneous/Miscellaneous.jsx'
 import Home from '../home/Home.jsx'
+import Rooms from '../rooms/Rooms.jsx'
 import Logo from '../../../assets/Logo.png'
 import { Image } from '@rneui/base'
 
@@ -16,12 +17,35 @@ export default function HomeStack() {
         <Stack.Screen
             name='Restaurant'
             component={Restaurant}
+            options={{title:'Restaurante',
+            headerStyle: {
+                backgroundColor: '#7E8D56'
+            },
+            headerRight: () => (
+                <Image
+                    source={Logo}
+                    style={{ width: 40, height: 30, marginRight: 10 }} 
+                />
+            )
+        }}
         />
 
         <Stack.Screen
             name='Spa'
             component={Spa}
+            options={{title:'Spa',
+            headerStyle: {
+                backgroundColor: '#7E8D56'
+            },
+            headerRight: () => (
+                <Image
+                    source={Logo}
+                    style={{ width: 40, height: 30, marginRight: 10 }} 
+                />
+            )
+        }}
         />
+
 
         <Stack.Screen
             name='Miscellaneous'
@@ -42,7 +66,34 @@ export default function HomeStack() {
         <Stack.Screen
             name='Home'
             component={Home}
-            options={{title: 'Inicio'}}
+            options={{title: 'Inicio',
+            headerStyle: {
+                backgroundColor: '#7E8D56'
+            },
+            headerRight: () => (
+                <Image
+                    source={Logo}
+                    style={{ width: 40, height: 30, marginRight: 10 }} 
+                />
+            )
+        }}
+        />
+
+         
+            <Stack.Screen
+            name='Rooms'
+            component={Rooms}
+            options={{title: 'Rooms',
+            headerStyle: {
+                backgroundColor: '#7E8D56'
+            },
+            headerRight: () => (
+                <Image
+                    source={Logo}
+                    style={{ width: 40, height: 30, marginRight: 10 }} 
+                />
+            )
+        }}
         />
     </Stack.Navigator>
     
