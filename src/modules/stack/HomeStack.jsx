@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import Restaurant from '../../modules/restaurant/Restaurant'
 import Spa from '../../modules/spa/Spa.jsx'
 import Miscellaneous from '../../modules/miscellaneous/Miscellaneous.jsx'
+import DetailsRoom from '../rooms/DetailsRoom.jsx'
 import Home from '../home/Home.jsx'
 import Rooms from '../rooms/Rooms.jsx'
 import Logo from '../../../assets/Logo.png'
@@ -80,10 +81,26 @@ export default function HomeStack() {
         />
 
          
-            <Stack.Screen
+        <Stack.Screen
             name='Rooms'
             component={Rooms}
             options={{title: 'Rooms',
+            headerStyle: {
+                backgroundColor: '#7E8D56'
+            },
+            headerRight: () => (
+                <Image
+                    source={Logo}
+                    style={{ width: 40, height: 30, marginRight: 10 }} 
+                />
+            )
+        }}
+        />
+
+        <Stack.Screen
+            name='DetailsRoom'
+            component={DetailsRoom}
+            options={{title: 'Detalles',
             headerStyle: {
                 backgroundColor: '#7E8D56'
             },

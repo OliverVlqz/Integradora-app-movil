@@ -3,7 +3,8 @@ import React from 'react'
 import { Image } from '@rneui/base'
 
 
-export default function FlatListRoom() {
+export default function FlatListRoom(props) {
+    const {navigation} = props;
   return (
     <View style={styles.row}>
     <Image
