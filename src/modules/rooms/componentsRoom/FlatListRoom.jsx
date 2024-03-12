@@ -25,9 +25,9 @@ export default function FlatListRoom(props) {
         <View style={{ flexDirection: 'row' }}>
             <TouchableOpacity style={styles.reserveButton}>
                 <Text style={styles.reserveButtonText}>Reservar</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> 
 
-            <TouchableOpacity style={styles.detailsButton}>
+            <TouchableOpacity style={styles.detailsButton} onPress={() => navigation.navigate('DetailsRoom')}>
                 <Text style={styles.detailsButtonText}>Ver detalles</Text>
             </TouchableOpacity>
         </View>

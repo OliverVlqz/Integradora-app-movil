@@ -39,7 +39,8 @@ const data = [
     
 ]
 
-export default function Rooms() {
+export default function Rooms(props) {
+    const {navigation} = props;
     return (
         <View style={styles.container}>
              <View style={styles.imageContainer}>
@@ -55,7 +56,7 @@ export default function Rooms() {
            <FlatList
                 data={data}
                 renderItem= {({item}) => 
-                <FlatListRoom item={item}/>}
+                <FlatListRoom item={item} navigation={navigation}/>}
                 keyExtractor={item => item.id}
                 style={[styles.scrollView, {paddingHorizontal: 12}]}
            />
