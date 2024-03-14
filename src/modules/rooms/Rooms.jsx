@@ -36,14 +36,14 @@ const data = [
         capacidad: 'Capacidad para 2 personas',
         precio: '$2,850.00'
     },
-    
+
 ]
 
 export default function Rooms(props) {
-    const {navigation} = props;
+    const { navigation } = props;
     return (
         <View style={styles.container}>
-             <View style={styles.imageContainer}>
+            <View style={styles.imageContainer}>
                 <Image
                     source={Habitaciones}
                     style={styles.image}
@@ -53,13 +53,15 @@ export default function Rooms(props) {
                     <Text style={styles.text}>Habitaciones</Text>
                 </View>
             </View>
-           <FlatList
+            <FlatList
                 data={data}
-                renderItem= {({item}) => 
-                <FlatListRoom item={item} navigation={navigation}/>}
-                keyExtractor={item => item.id}
-                style={[styles.scrollView, {paddingHorizontal: 12}]}
-           />
+                renderItem={({ item }) => (
+                    <FlatListRoom item={item} navigation={navigation} />
+                )}
+                keyExtractor={(item) => item.id}
+                style={[styles.scrollView, { paddingHorizontal: 12 }]}
+            />
+
         </View>
     );
 }
@@ -79,7 +81,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         width: '100%',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     text: {
         marginTop: 10,

@@ -3,37 +3,37 @@ import React from 'react'
 import { Image } from '@rneui/base'
 
 
-export default function FlatListRoom(props) {
-    const {navigation} = props;
-  return (
-    <View style={styles.row}>
-    <Image
-        source={{ uri: 'https://placehold.co/150x150' }}
-        style={styles.imageCard}
-    />
-    <View style={{ flex: 1, flexDirection: 'column', marginLeft: 8, alignItems: 'center' }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text style={styles.t_habitacion}>Sencilla</Text>
-        </View>
+export default function FlatListRoom({ item, navigation }) {
 
-        <View style={styles.descriptionContainer}>
-            <Text style={styles.t_cama}>1 cama matrimonial</Text>
-            <Text style={styles.capacidad}>Capacidad para 2 personas</Text>
-            <Text style={styles.precio}>$2.347.00 MXN.</Text>
-        </View>
+    return (
+        <View style={styles.row}>
+            <Image
+                source={{ uri: 'https://placehold.co/150x150' }}
+                style={styles.imageCard}
+            />
+            <View style={{ flex: 1, flexDirection: 'column', marginLeft: 8, alignItems: 'center' }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Text style={styles.t_habitacion}>{item.t_habitacion}</Text>
+                </View>
 
-        <View style={{ flexDirection: 'row' }}>
-            <TouchableOpacity style={styles.reserveButton}>
-                <Text style={styles.reserveButtonText}>Reservar</Text>
-            </TouchableOpacity> 
+                <View style={styles.descriptionContainer}>
+                    <Text style={styles.t_cama}>{item.t_cama}</Text>
+                    <Text style={styles.capacidad}>{item.capacidad}</Text>
+                    <Text style={styles.precio}>{item.precio}</Text>
+                </View>
 
-            <TouchableOpacity style={styles.detailsButton} onPress={() => navigation.navigate('DetailsRoom')}>
-                <Text style={styles.detailsButtonText}>Ver detalles</Text>
-            </TouchableOpacity>
+                <View style={{ flexDirection: 'row' }}>
+                    <TouchableOpacity style={styles.reserveButton}>
+                        <Text style={styles.reserveButtonText}>Reservar</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.detailsButton} onPress={() => navigation.navigate('DetailsRoom')}>
+                        <Text style={styles.detailsButtonText}>Ver detalles</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
         </View>
-    </View>
-</View>
-  )
+    );
 }
 
 const styles = StyleSheet.create({

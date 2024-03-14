@@ -5,9 +5,7 @@ import Sencilla1 from '../../../assets/habsen1.jpg'
 import Sencilla2 from '../../../assets/habsen2.jpg'
 import Sencilla3 from '../../../assets/habsen3.jpg'
 
-
 export default function DetailsRoom() {
-    
   const carouselData = [
     { id: '1', image: Sencilla1 },
     { id: '2', image: Sencilla2 },
@@ -21,21 +19,36 @@ export default function DetailsRoom() {
   };
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <Carousel
-          data={carouselData}
-          renderItem={renderCarouselItem}
-          sliderWidth={300}
-          itemWidth={300}
-          autoplay={true}
-          loop={true}
-        />
-        <View style={styles.additionalInfo}>
-          <Text style={styles.infoText}>Television pantalla plana</Text>
-          <Text style={styles.infoText}>Almohadas de plumas</Text>
-          <Text style={styles.infoText}>Baño privado con regadera</Text>
-          <Text style={styles.infoText}>Ventilador de techo</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.roomName}>Sencilla</Text>
+
+      <Carousel
+        data={carouselData}
+        renderItem={renderCarouselItem}
+        sliderWidth={300}
+        itemWidth={300}
+        autoplay={true}
+        loop={true}
+      />
+      <View style={styles.additionalInfo}>
+        <Text style={styles.title}> Detalles de la Habitación</Text>
+        <View style={styles.infoItem}>
+          <Text style={styles.infoText}>- 1 cama matrimonial</Text>
+        </View>
+        <View style={styles.infoItem}>
+          <Text style={styles.infoText}>- Capacidad para 2 personas</Text>
+        </View>
+        <View style={styles.infoItem}>
+          <Text style={styles.infoText}>- Televisión pantalla plana</Text>
+        </View>
+        <View style={styles.infoItem}>
+          <Text style={styles.infoText}>- Almohadas de plumas</Text>
+        </View>
+        <View style={styles.infoItem}>
+          <Text style={styles.infoText}>- Baño privado con regadera</Text>
+        </View>
+        <View style={styles.infoItem}>
+          <Text style={styles.infoText}>- Ventilador de techo</Text>
         </View>
       </View>
     </ScrollView>
@@ -44,22 +57,39 @@ export default function DetailsRoom() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    paddingBottom: 90, // Añadido espacio en la parte inferior
   },
   carouselImage: {
     width: 300,
     height: 200,
     borderRadius: 10,
-    marginBottom: 20,
-    marginTop: 20
+    marginBottom: 10, // Reducido el margen inferior
+    marginTop: 30
   },
   additionalInfo: {
+    width: '100%',
     padding: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  roomName: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginTop: 10
+  },
+  infoItem: {
+    marginBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
   },
   infoText: {
     fontSize: 16,
-    marginBottom: 10,
+    marginBottom: 5,
   },
 });
