@@ -2,48 +2,52 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { Image } from '@rneui/base'
 
-
-export default function FlatListRoom({ item, navigation }) {
+export default function FlatListRoom(props) {
+    const {id, t_habitacion, t_cama, capacidad, precio, image, customAction, action} = props;
 
     return (
         <View style={styles.row}>
             <Image
-                source={{ uri: 'https://placehold.co/150x150' }}
+                source={image}
                 style={styles.imageCard}
             />
             <View style={{ flex: 1, flexDirection: 'column', marginLeft: 8, alignItems: 'center' }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text style={styles.t_habitacion}>{item.t_habitacion}</Text>
+                    <Text style={styles.t_habitacion}>{t_habitacion}</Text>
                 </View>
 
                 <View style={styles.descriptionContainer}>
-                    <Text style={styles.t_cama}>{item.t_cama}</Text>
-                    <Text style={styles.capacidad}>{item.capacidad}</Text>
-                    <Text style={styles.precio}>{item.precio}</Text>
+                    <Text style={styles.t_cama}>{t_cama}</Text>
+                    <Text style={styles.capacidad}>{capacidad}</Text>
+                    <Text style={styles.precio}>{precio}</Text>
                 </View>
 
                 <View style={{ flexDirection: 'row' }}>
-                    <TouchableOpacity style={styles.reserveButton}>
+                    <TouchableOpacity style={styles.reserveButton} onPress={customAction}>
                         <Text style={styles.reserveButtonText}>Reservar</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> 
+                    {/* <TouchableOpacity style={styles.reserveButton} onPress={() => props.agregarCarrito()}>
+                     <Text style={styles.reserveButtonText}>Reservar</Text>
+                    </TouchableOpacity> */}
 
-                    <TouchableOpacity style={styles.detailsButton} onPress={() => navigation.navigate('DetailsRoom')}>
+
+
+
+                    <TouchableOpacity style={styles.detailsButton} onPress={action}>
                         <Text style={styles.detailsButtonText}>Ver detalles</Text>
                     </TouchableOpacity>
                 </View>
             </View>
         </View>
-    );
+    )
 }
 
 const styles = StyleSheet.create({
     row: {
-        //pa apple
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
-        //android
         elevation: 3,
         flexDirection: 'row',
         backgroundColor: "#ffff",
@@ -55,10 +59,6 @@ const styles = StyleSheet.create({
         width: 125,
         height: 125,
         borderRadius: 12
-    },
-    title: {
-        fontSize: 12,
-        fontWeight: "bold"
     },
     descriptionContainer: {
         alignItems: 'center',
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
         
     },
     button:{
-        paddingVertical: 3, 
+        paddingVertical: 3, 
     },
     scrollView: {
         flex: 1,

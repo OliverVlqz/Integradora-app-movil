@@ -1,49 +1,134 @@
-import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
-import { Image } from '@rneui/base';
-import Habitaciones from "../../../assets/hotel.jpg"
+import { Dimensions, StyleSheet, Text, View } from 'react-native'
+import React, {useState, useEffect} from 'react'
+import { Image } from '@rneui/base'
 import { FlatList } from 'react-native-gesture-handler'
 import FlatListRoom from './componentsRoom/FlatListRoom'
+import Habitaciones from "../../../assets/hotel.jpg"
 
-const { height } = Dimensions.get('window');
 
-const data = [
-    {
+const { height } = Dimensions.get('window')
+export default function Rooms(props) {
+    const {navigation} = props;
+    const [cartItems, setCartItems] = useState([]);
+
+   const agregarCarrito =(item)=>{
+    setCartItems(prevItems=>[...prevItems, item])
+   }
+
+    const data =  [
+        {
         id: '1',
         t_habitacion: 'Sencilla',
         t_cama: '1 cama matrimonial',
         capacidad: 'Capacidad para 2 personas',
-        precio: '$2.347.00'
+        precio: '$2.347.00',
+        image: require('../../../assets/hotel.jpg'),
+        action: () => navigation.navigate('RoomDetail',
+        {
+            id: '1',
+            t_habitacion: 'Sencilla',
+            t_cama: '1 cama matrimonial',
+            capacidad: 'Capacidad para 2 personas',
+            precio: '$2.347.00',
+            image: require('../../../assets/hotel.jpg')
+        }),
+        customAction: () => navigation.navigate('Cart',
+        {
+            id: '1',
+            t_habitacion: 'Sencilla',
+            t_cama: '1 cama matrimonial',
+            capacidad: 'Capacidad para 2 personas',
+            precio: '$2.347.00',
+            image: require('../../../assets/hotel.jpg')
+
+        }
+        ), // Navegación personalizada
     },
     {
         id: '2',
         t_habitacion: 'Junior Suite',
         t_cama: '1 cama King Size',
         capacidad: 'Capacidad para 2 personas',
-        precio: '$2,849.00'
+        precio: '$2,849.00',
+        image: require('../../../assets/hotel.jpg'),
+        action: () => navigation.navigate('RoomDetail',
+        {
+            id: '2',
+            t_habitacion: 'Junior Suite',
+            t_cama: '1 cama King Size',
+            capacidad: 'Capacidad para 2 personas',
+            precio: '$2,849.00',
+            image: require('../../../assets/hotel.jpg')
+        }),
+        customAction: () => navigation.navigate('Cart',
+        {
+            id: '2',
+            t_habitacion: 'Junior Suite',
+            t_cama: '1 cama King Size',
+            capacidad: 'Capacidad para 2 personas',
+            precio: '$2,849.00',
+            image: require('../../../assets/hotel.jpg')
+        }),
     },
     {
         id: '3',
         t_habitacion: 'Senior Suite',
         t_cama: '2 camas matrimoniales',
         capacidad: 'Capacidad para 4 personas',
-        precio: '$3,482.00'
+        precio: '$3,482.00',
+        image: require('../../../assets/hotel.jpg'),
+        action: () => navigation.navigate('RoomDetail',
+        {
+            id: '3',
+            t_habitacion: 'Senior Suite',
+            t_cama: '2 camas matrimoniales',
+            capacidad: 'Capacidad para 4 personas',
+            precio: '$3,482.00',
+            image: require('../../../assets/hotel.jpg')
+        }),
+        customAction: () => navigation.navigate('Cart',
+        {
+            id: '3',
+            t_habitacion: 'Senior Suite',
+            t_cama: '2 camas matrimoniales',
+            capacidad: 'Capacidad para 4 personas',
+            precio: '$3,482.00',
+            image: require('../../../assets/hotel.jpg')
+        }),
     },
     {
         id: '4',
         t_habitacion: 'Master Suite',
         t_cama: '1 cama King Size',
         capacidad: 'Capacidad para 2 personas',
-        precio: '$2,850.00'
+        precio: '$2,850.00',
+        image: require('../../../assets/hotel.jpg'),
+        action: () => navigation.navigate('RoomDetail',
+        {
+            id: '4',
+            t_habitacion: 'Master Suite',
+            t_cama: '1 cama King Size',
+            capacidad: 'Capacidad para 2 personas',
+            precio: '$2,850.00',
+            image: require('../../../assets/hotel.jpg')
+        }),
+        customAction: () => navigation.navigate('Cart',
+        {
+            id: '4',
+            t_habitacion: 'Master Suite',
+            t_cama: '1 cama King Size',
+            capacidad: 'Capacidad para 2 personas',
+            precio: '$2,850.00',
+            image: require('../../../assets/hotel.jpg')
+        }),
     },
 
-]
+]    
 
-export default function Rooms(props) {
-    const { navigation } = props;
-    return (
-        <View style={styles.container}>
-            <View style={styles.imageContainer}>
+
+  return (
+    <View style={styles.container}>
+             <View style={styles.imageContainer}>
                 <Image
                     source={Habitaciones}
                     style={styles.image}
@@ -56,15 +141,28 @@ export default function Rooms(props) {
             <FlatList
                 data={data}
                 renderItem={({ item }) => (
-                    <FlatListRoom item={item} navigation={navigation} />
-                )}
-                keyExtractor={(item) => item.id}
+                    <FlatListRoom
+                    t_habitacion={item.t_habitacion}
+                    t_cama={item.t_cama}
+                    capacidad={item.capacidad}
+                    precio={item.precio}
+                    image={item.image}
+                    action={() => item.action()}
+                    //customAction={() => item.customAction()}
+                    customAction={() => agregarCarrito(item)}
+                    //navigation={navigation} 
+                    />
+            )}
+
+                
+                keyExtractor={item => item.id}
                 style={[styles.scrollView, { paddingHorizontal: 12 }]}
             />
-
-        </View>
-    );
+            </View>
+  )
 }
+
+
 
 const styles = StyleSheet.create({
     container: {
@@ -90,4 +188,4 @@ const styles = StyleSheet.create({
         color: 'white',
     },
 
-});
+})
