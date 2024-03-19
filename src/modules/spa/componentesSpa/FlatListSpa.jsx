@@ -1,10 +1,9 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Image } from '@rneui/base';
 
-export default function FlatListRoom(props) {
-    const { id, t_habitacion, t_cama, capacidad, precio, image, customAction, action } = props;
-
+export default function FlatListSpa(props) {
+    const {id, title, description, price, image} = props;
     return (
         <View style={styles.row}>
             <Image
@@ -13,22 +12,20 @@ export default function FlatListRoom(props) {
             />
             <View style={{ flex: 1, flexDirection: 'column', marginLeft: 8, alignItems: 'center' }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text style={styles.t_habitacion}>{t_habitacion}</Text>
+                    <Text style={styles.title}>{title}</Text>
                 </View>
 
                 <View style={styles.descriptionContainer}>
-                    <Text style={styles.t_cama}>{t_cama}</Text>
-                    <Text style={styles.capacidad}>{capacidad}</Text>
-                    <Text style={styles.precio}>{precio}</Text>
+                    <Text style={styles.description}>{description}</Text>
+                    <Text style={styles.description}>{price}</Text>
                 </View>
 
                 <View style={{ flexDirection: 'row' }}>
-                    <TouchableOpacity style={styles.reserveButton} onPress={customAction}>
+                    <TouchableOpacity style={styles.reserveButton}>
                         <Text style={styles.reserveButtonText}>Reservar</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.detailsButton} onPress={action}>
-                        <Text style={styles.detailsButtonText}>Ver detalles</Text>
-                    </TouchableOpacity>
+
+                  
                 </View>
             </View>
         </View>
@@ -53,22 +50,14 @@ const styles = StyleSheet.create({
         height: 125,
         borderRadius: 12
     },
+    title: {
+        fontSize: 12,
+        fontWeight: "bold"
+    },
     descriptionContainer: {
         alignItems: 'center',
     },
-    capacidad: {
-        fontSize: 12,
-        marginBottom: 2
-    },
-    t_habitacion: {
-        fontSize: 12,
-        marginBottom: 2
-    },
-    t_cama: {
-        fontSize: 12,
-        marginBottom: 2
-    },
-    precio: {
+    description: {
         fontSize: 12,
         marginBottom: 2
     },
@@ -95,17 +84,5 @@ const styles = StyleSheet.create({
     reserveButtonText: {
         color: 'white',
         fontWeight: 'bold',
-    },
-    buttonContainer: {
-        marginHorizontal: 4,
-        borderRadius: 8,
-        overflow: 'hidden',
-
-    },
-    button: {
-        paddingVertical: 3,
-    },
-    scrollView: {
-        flex: 1,
     },
 });

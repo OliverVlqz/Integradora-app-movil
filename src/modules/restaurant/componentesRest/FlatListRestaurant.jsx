@@ -2,7 +2,8 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React, {useState} from 'react'
 import { Image } from '@rneui/base'
 
-export default function FlatListRestaurant({item}) {
+export default function FlatListRestaurant(props) {
+    const {id, title, description, price, image, action} = props;
     const [quantity, setQuantity] = useState(1);
 
     const increaseQuantity = () => {
@@ -18,17 +19,17 @@ export default function FlatListRestaurant({item}) {
   return (
     <View style={styles.row}>
     <Image
-        source={{ uri: 'https://placehold.co/150x150' }}
+        source={image}
         style={styles.imageCard}
     />
     <View style={{ flex: 1, flexDirection: 'column', marginLeft: 8, alignItems: 'center' }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text style={styles.title}>{item.title}</Text>
+            <Text style={styles.title}>{title}</Text>
 
         </View>
 
         <View style={styles.descriptionContainer}>
-            <Text style={styles.description}>{item.description}</Text>
+            <Text style={styles.description}>{description}</Text>
         </View>
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -41,7 +42,7 @@ export default function FlatListRestaurant({item}) {
                     <Text style={styles.quantityButton}>+</Text>
                 </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.reserveButton}>
+            <TouchableOpacity style={styles.reserveButton} onPress={customAction}>
                 <Text style={styles.reserveButtonText}>Agregar</Text>
             </TouchableOpacity>
         </View>

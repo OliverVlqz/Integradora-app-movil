@@ -11,9 +11,10 @@ export default function Rooms(props) {
     const {navigation} = props;
     const [cartItems, setCartItems] = useState([]);
 
-   const agregarCarrito =(item)=>{
-    setCartItems(prevItems=>[...prevItems, item])
-   }
+    const agregarCarrito = (item) => {
+        setCartItems(prevItems => [...prevItems, item]);
+        navigation.navigate('Cart', { cartItems: [...cartItems, item] });
+    };
 
     const data =  [
         {
