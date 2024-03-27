@@ -1,23 +1,26 @@
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import { Image } from '@rneui/base'
 import { FlatList } from 'react-native-gesture-handler'
 import FlatListRoom from './componentsRoom/FlatListRoom'
 import Habitaciones from "../../../assets/hotel.jpg"
+import {CartFuction} from '../cart/CartFuction';
 
 
 const { height } = Dimensions.get('window')
 export default function Rooms(props) {
     const {navigation} = props;
-    const [cartItems, setCartItems] = useState([]);
+   const { cartItems, addItemToCart } = useContext(CartFuction);
 
+    
     const agregarCarrito = (item) => {
-        setCartItems(prevItems => [...prevItems, item]);
+        addItemToCart(item);
         navigation.navigate('Cart', { cartItems: [...cartItems, item] });
-    };
+      };
 
     const data =  [
         {
+        type: 'room',
         id: '1',
         t_habitacion: 'Sencilla',
         t_cama: '1 cama matrimonial',
@@ -46,6 +49,7 @@ export default function Rooms(props) {
         ), // Navegación personalizada
     },
     {
+        type: 'room',
         id: '2',
         t_habitacion: 'Junior Suite',
         t_cama: '1 cama King Size',
@@ -72,6 +76,7 @@ export default function Rooms(props) {
         }),
     },
     {
+        type: 'room',
         id: '3',
         t_habitacion: 'Senior Suite',
         t_cama: '2 camas matrimoniales',
@@ -98,6 +103,7 @@ export default function Rooms(props) {
         }),
     },
     {
+        type: 'room',
         id: '4',
         t_habitacion: 'Master Suite',
         t_cama: '1 cama King Size',

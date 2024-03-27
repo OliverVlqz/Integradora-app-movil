@@ -3,12 +3,13 @@ import React, {useState} from 'react'
 import { Image } from '@rneui/base'
 
 export default function FlatListRestaurant(props) {
-    const {id, title, description, price, image, action} = props;
+    const {id, title, description, price, image, action, customAction, isRestaurant} = props;
     const [quantity, setQuantity] = useState(1);
 
     const increaseQuantity = () => {
         setQuantity(quantity + 1);
     };
+    
 
     const decreaseQuantity = () => {
         if (quantity > 1) {
@@ -30,6 +31,8 @@ export default function FlatListRestaurant(props) {
 
         <View style={styles.descriptionContainer}>
             <Text style={styles.description}>{description}</Text>
+            <Text style={styles.description}>{price}</Text>
+
         </View>
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>

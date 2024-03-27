@@ -33,9 +33,10 @@ export default function Login(props) {
                     placeholder="example@example.com"
                     label="Correo electrónico: *"
                     keyboardType="email-address"
-                    onChange={({ nativeElement: { text } }) => setEmail(text)}
+                    onChange={({ nativeEvent: { text } }) => setEmail(text)}
                     labelStyle={styles.label}
                     containerStyle={styles.input}
+                    inputStyle={{ color: '#fff' }} // Establece el color del texto escrito
                     errorMessage={showMessage}
                     rightIcon={
                         <Icon
@@ -49,9 +50,10 @@ export default function Login(props) {
                 <Input
                     placeholder="*******"
                     label="Contraseña: *"
-                    onChange={({ nativeElement: { text } }) => setPassword(text)}
+                    onChange={({ nativeEvent: { text } }) => setPassword(text)}
                     labelStyle={styles.label}
                     containerStyle={styles.input}
+                    inputStyle={{ color: '#fff' }} // Establece el color del texto escrito
                     secureTextEntry={showPassword}
                     errorMessage={showMessage}
                     rightIcon={

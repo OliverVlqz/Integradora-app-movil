@@ -1,44 +1,56 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { View, StyleSheet, Dimensions, FlatList, Text } from 'react-native';
 import { Image } from '@rneui/base';
 import Hotel from "../../../assets/spa.jpg";
 import FlatListSpa from "./componentesSpa/FlatListSpa"
+import {CartFuction} from '../cart/CartFuction';
 
 const { height } = Dimensions.get('window');
 
+
+
+export default function Spa(props) {
+    const {navigation} = props;
+    const { cartItems, addItemToCart } = useContext(CartFuction);
+    const agregarCarrito = (item) => {
+        addItemToCart(item);
+        navigation.navigate('Cart', { cartItems: [...cartItems, item] });
+      };
+
 const data = [
     {
+        type:'spa',
         id: '1',
         title: 'Body Sculpt',
-        description: '3 masajes reductivos, 3 criolipólisis 3 mesoterapias tensoras',
-        price: '$1,549.00 MXN',
+        description: '3 masajes reductivos',
+        precio: '$1,549.00 MXN',
         image: require('../../../assets/spa.jpg'),
     },
     {
+        type:'spa',
         id: '2',
         title: 'Renovación Deluxe',
-        description: '3 drenajes linfáticos 3 masajes reductivos 3 masajes anticeluliticos',
-        price: '$1,629.00 MXN',
+        description: '3 drenajes linfáticos',
+        precio: '$1,629.00 MXN',
         image: require('../../../assets/spa.jpg'),
     },
     {
+        type:'spa',
         id: '3',
         title: 'Masaje en Pareja',
-        description: '+ Infusión relajante + Aromaterapia + Música terapéutica',
-        price: '$1,869.00 MXN',
+        description: '+ Infusión relajante + Aromaterapia',
+        precio: '$1,869.00 MXN',
         image: require('../../../assets/spa.jpg'),
     },
     {
+        type:'spa',
         id: '4',
         title: 'Golden',
-        description: '+ Relajante holístico + Relajante sueco + Masaje descontracturante',
-        price: '$1,429.00 MXN',
+        description: '+ Relajante holístico + Relajante sueco',
+        precio: '$1,429.00 MXN',
         image: require('../../../assets/spa.jpg'),
     },
 ];
-
-export default function Spa() {
-
     return (
         <View style={styles.container}>
             <View style={styles.imageContainer}>
@@ -57,8 +69,10 @@ export default function Spa() {
                 <FlatListSpa 
                     title={item.title}
                     description={item.description}
-                    price={item.price}
+                    precio={item.precio}
                     image={item.image}
+                    action={() => item.action()}
+                    customAction={() => agregarCarrito(item)}
                     /> )}
                 
                 keyExtractor={item => item.id}

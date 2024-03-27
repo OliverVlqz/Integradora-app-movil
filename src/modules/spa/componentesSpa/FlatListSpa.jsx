@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {useState, useContext} from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Image } from '@rneui/base';
 
 export default function FlatListSpa(props) {
-    const {id, title, description, price, image} = props;
+    const {id, title, description, precio, image, customAction, action} = props;
     return (
         <View style={styles.row}>
             <Image
@@ -17,14 +17,13 @@ export default function FlatListSpa(props) {
 
                 <View style={styles.descriptionContainer}>
                     <Text style={styles.description}>{description}</Text>
-                    <Text style={styles.description}>{price}</Text>
+                    <Text style={styles.description}>{precio}</Text>
                 </View>
 
                 <View style={{ flexDirection: 'row' }}>
-                    <TouchableOpacity style={styles.reserveButton}>
-                        <Text style={styles.reserveButtonText}>Reservar</Text>
-                    </TouchableOpacity>
-
+                <TouchableOpacity style={styles.reserveButton} onPress={customAction}>
+                <Text style={styles.reserveButtonText}>Reservar</Text>
+            </TouchableOpacity>
                   
                 </View>
             </View>

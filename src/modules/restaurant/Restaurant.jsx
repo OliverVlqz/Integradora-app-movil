@@ -1,26 +1,30 @@
 import { Text, View, StyleSheet, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
+import React, { useState, useContext } from 'react';
 import { Image } from '@rneui/base';
 import Comida from "../../../assets/restaurante.jpg"
 import { FlatList } from 'react-native-gesture-handler';
 import FlatListRestaurant from './componentesRest/FlatListRestaurant';
-
+import {CartFuction} from '../cart/CartFuction';
 
 const { height } = Dimensions.get('window');
 
 export default function Restaurant(props) {
     const {navigation} = props;
-    const [cartItems, setCartItems] = useState([]);
+    const { cartItems, addItemToCart } = useContext(CartFuction);
 
     const agregarCarrito = (item) => {
-        setCartItems(prevItems => [...prevItems, item]);
+        addItemToCart(item);
         navigation.navigate('Cart', { cartItems: [...cartItems, item] });
-    };
-    
+      };
+
+
 const data =[
     {
+        type: 'restaurant',
         id: '1',
         title: 'Bacalao',
-        description: 'Nuestra Cazuela de Bacalao presenta el bacalao en su salsa a la vizcaína, acompañado de esponjosito arroz blanco con verduras.',
+        description: 'Bacalao en su salsa a la vizcaína, acompañado de esponjosito arroz blanco con verduras.',
+        price: "$120.00",
         img: require('../../../assets/restaurante.jpg'),    
         action: () => navigation.navigate('RestaurantDetail',
         {
@@ -31,9 +35,11 @@ const data =[
         }),
     },
     {
+        type: 'restaurant',
         id: '2',
         title: 'Bacalao',
         description: 'Nuestra Cazuela de Bacalao presenta el bacalao en su salsa a la vizcaína, acompañado de esponjosito arroz blanco con verduras.',
+        price: "$120.00",
         img: require('../../../assets/restaurante.jpg'),
         action: () => navigation.navigate('RestaurantDetail',
         {
@@ -44,9 +50,11 @@ const data =[
         }),
     },
     {
+        type: 'restaurant',
         id: '3',
         title: 'Bacalao',
         description: 'Nuestra Cazuela de Bacalao presenta el bacalao en su salsa a la vizcaína, acompañado de esponjosito arroz blanco con verduras.',
+        price: "$120.00",
         img: require('../../../assets/restaurante.jpg'),
         action: () => navigation.navigate('RestaurantDetail',
         {
@@ -57,9 +65,11 @@ const data =[
         }),
     },
     {
+        type: 'restaurant',
         id: '4',
         title: 'Bacalao',
         description: 'Nuestra Cazuela de Bacalao presenta el bacalao en su salsa a la vizcaína, acompañado de esponjosito arroz blanco con verduras.',
+        price: "$120.00",
         img: require('../../../assets/restaurante.jpg'),
         action: () => navigation.navigate('RestaurantDetail',
         {
@@ -92,9 +102,11 @@ const data =[
                 <FlatListRestaurant 
                     title={item.title}
                     description={item.description}
+                    price={item.price}
                     image={item.img}
                     action={() => item.action()}
                     customAction={() => agregarCarrito(item)}
+                    isRestaurant={item.isRestaurant}
 
                 />)}
                 keyExtractor={item => item.id}

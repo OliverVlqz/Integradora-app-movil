@@ -45,9 +45,10 @@ export default function CreateAccount(props){
                     placeholder="example@example.com"
                     label="Correo electrónico: *"
                     keyboardType="email-address"
-                    onChange={({ nativeElement: { text } }) => setEmail(text)}
+                    onChange={({ nativeEvent: { text } }) => setEmail(text)}
                     labelStyle={styles.label}
                     containerStyle={styles.input}
+                    inputStyle={{ color: '#fff' }} // Establece el color del texto escrito
                     errorMessage={showMessage}
                     rightIcon={
                         <Icon
@@ -61,9 +62,10 @@ export default function CreateAccount(props){
                 <Input
                     placeholder="*******"
                     label="Contraseña: *"
-                    onChange={({ nativeElement: { text } }) => setPassword(text)}
+                    onChange={({ nativeEvent: { text } }) => setPassword(text)}
                     labelStyle={styles.label}
                     containerStyle={styles.input}
+                    inputStyle={{ color: '#fff' }} // Establece el color del texto escrito
                     secureTextEntry={showPassword}
                     rightIcon={
                         <Icon
@@ -81,12 +83,13 @@ export default function CreateAccount(props){
                 onChange={({ nativeEvent: { text } }) => setConfirmPassword(text)}
                 labelStyle={styles.label}
                 containerStyle={styles.input}
+                inputStyle={{ color: '#fff' }} // Establece el color del texto escrito
                 secureTextEntry={showPassword}
                 rightIcon={
                     <Icon
                         type="material-community"
                         name={showPassword ? 'eye-outline' : 'eye-off-outline'}
-                        color='#ffd'
+                        color='#fff'
                         onPress={() => setShowPassword(!showPassword)}
                     />
                 }

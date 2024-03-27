@@ -1,45 +1,61 @@
 import { StyleSheet, Text, View, Dimensions, TouchableOpacity, ScrollView, FlatList } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react';
 import { Image } from '@rneui/base'
 import Miscelaneos from '../../../assets/miscelaneos.jpg'
 import FlatListMiscellaneous from './componentesMisce/FlatListMiscellaneous';
-
+import {CartFuction} from '../cart/CartFuction';
 const { height } = Dimensions.get('window');
 
-const data = [
-    {
-        id: '1', 
-        title: 'Jabón de baño',
-        description: '$30.00'
-    },
-    {
-        id: '2', 
-        title: 'Champú',
-        description: '$30.00'
-    },
-    {
-        id: '3', 
-        title: 'Crema corporal',
-        description: '$30.00'
-    },
-    {
-        id: '4', 
-        title: 'Cepillo de dientes',
-        description: '$30.00'
-    },
-    {
-        id: '5', 
-        title: 'Crema para afeitar',
-        description: '$30.00'
-    },
-    {
-        id: '6', 
-        title: 'Cepillo para cabello',
-        description: '$30.00'
-    },
-]
 
-export default function Miscellaneous() {
+
+
+export default function Miscellaneous(props) {
+    const {navigation} = props;
+    const { cartItems, addItemToCart } = useContext(CartFuction);
+    const agregarCarrito = (item) => {
+        addItemToCart(item);
+        navigation.navigate('Cart', { cartItems: [...cartItems, item] });
+      };
+
+      const data = [
+        {
+            type: 'miscellaneous',
+            id: '1', 
+            title: 'Jabón de baño',
+            precio: '$30.00'
+        },
+        {
+            type: 'miscellaneous',
+            id: '2', 
+            title: 'Champú',
+            precio: '$30.00'
+        },
+        {
+            type: 'miscellaneous',
+            id: '3', 
+            title: 'Crema corporal',
+            precio: '$30.00'
+        },
+        {
+            type: 'miscellaneous',
+            id: '4', 
+            title: 'Cepillo de dientes',
+            precio: '$30.00'
+        },
+        {
+            type: 'miscellaneous',
+            id: '5', 
+            title: 'Crema para afeitar',
+            precio: '$30.00'
+        },
+        {
+            type: 'miscellaneous',
+            id: '6', 
+            title: 'Cepillo para cabello',
+            precio: '$30.00'
+        },
+    ]
+
     return (
         <View style={styles.container}>
             <View style={styles.imageContainer}>
@@ -54,10 +70,17 @@ export default function Miscellaneous() {
             </View>
             <FlatList
                 data={data}
-                renderItem={({item}) =>
-                <FlatListMiscellaneous item={item}/>}
-                keyExtractor={item=> item.id}
-                style={[styles.scrollView, {padding: 12}]}
+                renderItem={({item}) =>(
+                    <FlatListMiscellaneous
+                        title={item.title}
+                        precio={item.precio}
+                        action={() => item.action()}
+                        customAction={() => agregarCarrito(item)}
+                    />
+                )}
+                keyExtractor={item => item.id}
+                style = {[styles.scrollView, {paddingHorizontal: 12}]}
+                
             />
 
         </View>
