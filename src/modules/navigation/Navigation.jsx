@@ -10,7 +10,8 @@ import Spa from "../../modules/spa/Spa.jsx"
 import Rooms from "../../modules/rooms/Rooms.jsx"
 import Logo from "../../../assets/Logo.png"
 import HomeStack from '../../modules/stack/HomeStack.jsx'
-import {Icon} from '@rneui/base'
+import { Icon } from '@rneui/base'
+import Profile from '../auth/adapters/screens/Profile.jsx'
 
 
 const Tab = createBottomTabNavigator();
@@ -30,26 +31,26 @@ const CustomHeaderTitle = ({ title }) => {
 export default function Navigation() {
   return (
     <NavigationContainer>
-<Tab.Navigator
-  screenOptions={({ route }) => ({
-    tabBarIcon: ({ focused, color, size }) => {
-        const { iconName, iconType } = getIconName(route.name, focused);
-        // Retornar un Icon de React Native Elements
-        return <Icon name={iconName} type={iconType} size={size} color={color} />;
-    },
-    tabBarActiveTintColor: '#7E8D56',
-    tabBarInactiveTintColor: 'gray',
-    headerShown: false,
-    headerStyle: {
-      backgroundColor: '#7E8D56',
-    },
-  })}
->
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            const { iconName, iconType } = getIconName(route.name, focused);
+            // Retornar un Icon de React Native Elements
+            return <Icon name={iconName} type={iconType} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: '#7E8D56',
+          tabBarInactiveTintColor: 'gray',
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: '#7E8D56',
+          },
+        })}
+      >
 
         <Tab.Screen name="Login"
           component={Login}
           options={{ title: "Inicio de sesión" }}
-        />  
+        />
 
         <Tab.Screen name='CreateAccount'
           component={CreateAccount}
@@ -66,26 +67,46 @@ export default function Navigation() {
           }}
         />
 
+        <Tab.Screen
+          name="Profile"
+          component={Profile}
+          options={{
+            title: 'Perfil',
+            headerStyle: {
+                backgroundColor: '#7E8D56'
+            },
+            headerRight: () => (
+                <Image
+                    source={Logo}
+                    style={{ width: 40, height: 30, marginRight: 10 }}
+                />
+            )
+        }}
+        />
+
       </Tab.Navigator>
     </NavigationContainer>
   )
 }
 
-const getIconName = (routeName, focused) =>{
-  let iconName ='';
+const getIconName = (routeName, focused) => {
+  let iconName = '';
   let iconType = 'material-community';
 
-    switch (routeName) {
-        case 'HomeStack':
-            iconName = focused ? 'home' : 'home';
-            break;
-        case 'CreateAccount':
-            iconName = focused ? 'account' : 'account-outline';
-            break;
-        case 'Login':
-            iconName = focused ? 'login' : 'login';
-            break;
-    }
+  switch (routeName) {
+    case 'HomeStack':
+      iconName = focused ? 'home' : 'home';
+      break;
+    case 'CreateAccount':
+      iconName = focused ? 'account' : 'account-outline';
+      break;
+    case 'Login':
+      iconName = focused ? 'login' : 'login';
+      break;
+    case 'Profile':
+      iconName = focused ? 'account-circle' : 'account-circle';
+      break;
+  }
 
-    return { iconName, iconType };
+  return { iconName, iconType };
 };

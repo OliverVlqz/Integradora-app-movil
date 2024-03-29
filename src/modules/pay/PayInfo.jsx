@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Alert } from "react-native";
 import Tarjeta from '../../../assets/tarjeta.png'
+import Modal from "react-native-modal";
+import PaymentHistory from '../paymentHistory/PaymentHistory'
 
 const PayInfo = ({ route, navigation }) => {
   const { cartItems } = route.params;
@@ -12,9 +14,16 @@ const PayInfo = ({ route, navigation }) => {
     cvv: ""
   });
 
+  
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
   const handlePayment = () => {
     console.log("Información de la tarjeta:", cardInfo);
+    // Mostrar mensaje de pago exitoso
+    setIsModalVisible(true);
   };
+  
+
 
   return (
     <View style={styles.container}>
@@ -69,6 +78,17 @@ const PayInfo = ({ route, navigation }) => {
           <Text style={styles.reserveButtonText}>Pagar</Text>
         </TouchableOpacity>
       </View>
+      <Modal isVisible={isModalVisible} animationIn="fadeIn" animationOut="fadeOut">
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>¡Pago Exitoso!</Text>
+            <Text style={styles.modalText}>¡Gracias por tu compra!</Text>
+            <TouchableOpacity style={styles.modalButton} onPress={() => setIsModalVisible(false)}>
+              <Text style={styles.modalButtonText}>OK</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -146,6 +166,38 @@ const styles = StyleSheet.create({
     width: 87,
     height: 52,
     marginRight: 10,
+  },
+  modalContainer: {
+    backgroundColor: "#ffffff",
+    borderRadius: 8,
+    padding: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContent: {
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#4F8585", 
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 20,
+    textAlign: "center",
+    color: "#333333", 
+  },
+  modalButton: {
+    backgroundColor: "#4F8585", 
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  modalButtonText: {
+    fontSize: 16,
+    color: "#ffffff", 
   },
 });
 

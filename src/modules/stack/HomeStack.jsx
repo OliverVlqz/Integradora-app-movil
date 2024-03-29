@@ -84,7 +84,7 @@ export default function HomeStack() {
                             style={{ width: 40, height: 30, marginRight: 10 }}
                         />
                     )
-                }}
+                }}  
             />
 
 
@@ -154,6 +154,8 @@ export default function HomeStack() {
                     )
                 }}
             />
+
+            
         </Stack.Navigator>
 
     )
