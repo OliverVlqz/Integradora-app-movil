@@ -3,31 +3,10 @@ import {  View,  Text,  StyleSheet,  FlatList,  TouchableOpacity,} from "react-n
 import { Image } from "@rneui/base";
 import {CartFuction} from "./CartFuction"
 
-/*const removeCart=(itemRem)=>{
-    const { cartItems, setCartItems } = useContext(CartFuction);
-    Alert.alert(
-      "Eliminar articulo",
-      `¿Estas seguro de eliminar "${itemRem.title}" del carrito?`,
-      [
-        { text: "Cancelar", onPress: () => {}, style: "cancel" },
-        {
-          text: "Eliminar",
-          onPress: () => {
-            const updatedCartItems = cartItems.filter((item) => item.id !== itemRem.id);
-            setCartItems(updatedCartItems);
-          },
-        },
-      ],
-      { cancelable: false }
-    );
-  }
-
-<Cart cartItems={cartItems} setCartItems={setCartItems} removeCart={removeCart} />;*/
-
-
-
-export default function Cart({ route }) {
+export default function Cart({ route, navigation }) {
   const { cartItems } = useContext(CartFuction);
+ 
+
   
   const renderItem = ({ item }) => {
     switch (item.type) {
@@ -51,7 +30,6 @@ export default function Cart({ route }) {
             <View>
               <Text style={styles.t_habitacion}>{item.title}</Text>
                 
-                {/* <Text style={styles.textDescription}>{item.description}</Text> */}
                 <Text style={styles.precio}>{item.price}</Text>
               
             </View>
@@ -101,34 +79,34 @@ export default function Cart({ route }) {
         keyExtractor={(item) => item.id}
         ItemSeparatorComponent={() => <View style={styles.separador} />}
       />
-      <View style={styles.resumen}>
-        <Text style={[styles.title, { paddingBottom: 25 }]}>Resumen</Text>
+        <View style={styles.resumen}>
+          <Text style={[styles.title, { paddingBottom: 25 }]}>Resumen</Text>
 
-        <View style={{ flexDirection: "row" }}>
-          <Text style={{ flexDirection: "row" }}>Subtotal:</Text>
-          <Text style={{ flexDirection: "row" }}> </Text>
-          <Text style={{ flexDirection: "row" }}>$</Text>
-        </View>
+          <View style={{ flexDirection: "row" }}>
+            <Text style={{ flexDirection: "row" }}>Subtotal:</Text>
+            <Text style={{ flexDirection: "row" }}> </Text>
+            <Text style={{ flexDirection: "row" }}>$</Text>
+          </View>
 
-        <View style={{ flexDirection: "row" }}>
-          <Text style={{ flexDirection: "row" }}>Impuestos:</Text>
-          <Text style={{ flexDirection: "row" }}> </Text>
-          <Text style={{ flexDirection: "row" }}>$</Text>
-        </View>
-        <View style={styles.linea}></View>
-        <View style={{ flexDirection: "row" }}>
-          <Text style={{ flexDirection: "row" }}>Total:</Text>
-          <Text style={{ flexDirection: "row" }}> </Text>
-          <Text style={{ flexDirection: "row" }}>$</Text>
-        </View>
+          <View style={{ flexDirection: "row" }}>
+            <Text style={{ flexDirection: "row" }}>Impuestos:</Text>
+            <Text style={{ flexDirection: "row" }}> </Text>
+            <Text style={{ flexDirection: "row" }}>$</Text>
+          </View>
+          <View style={styles.linea}></View>
+          <View style={{ flexDirection: "row" }}>
+            <Text style={{ flexDirection: "row" }}>Total:</Text>
+            <Text style={{ flexDirection: "row" }}> </Text>
+            <Text style={{ flexDirection: "row" }}>$</Text>
+          </View>
 
         <View style={{ flexDirection: "column", padding: 10 }}>
-          <TouchableOpacity style={styles.reserveButton} onPress={""}>
+          <TouchableOpacity style={styles.reserveButton} onPress={() => navigation.navigate('PayInfo', { cartItems: cartItems })}>
             <Text style={styles.reserveButtonText}>Pagar</Text>
           </TouchableOpacity>
         </View>
         <View style={{ flexDirection: "column", padding: 5 }}>
-          <TouchableOpacity style={styles.detailsButton} onPress={""}>
+          <TouchableOpacity style={styles.detailsButton} onPress={() => navigation.navigate('Home')}>
             <Text style={styles.detailsButtonText}>Agregar Servicios</Text>
           </TouchableOpacity>
         </View>
