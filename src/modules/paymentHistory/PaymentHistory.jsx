@@ -1,62 +1,69 @@
 import React from "react";
-import { View, Text, FlatList, StyleSheet, SafeAreaView } from "react-native";
+import { View, Text, FlatList, StyleSheet } from "react-native";
+
+const PaymentHistoryCard = ({ item }) => {
+  return (
+    <View style={styles.outerMargin}>
+      <View style={styles.innerMargin}>
+        <View style={styles.paymentItem}>
+          <View style={styles.paymentItemContent}>
+            <View style={styles.amountContainer}>
+              <Text style={styles.amountText}>Monto: ${item.amount}</Text>
+            </View>
+            <Text>Fecha: {item.date.toLocaleString()}</Text>
+          </View>
+        </View>
+      </View>
+    </View>
+  );
+};
 
 const PaymentHistory = ({ paymentHistory }) => {
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Historial de Pagos</Text>
-      <FlatList
-        data={paymentHistory}
-        renderItem={({ item, index }) => (
-          <View style={styles.paymentItem}>
-            <View style={styles.paymentItemBorder}>
-              <Text style={styles.amount}>Monto: ${item.amount}</Text>
-              <Text>Fecha: {item.date.toLocaleString()}</Text>
-            </View>
-          </View>
-        )}
-        keyExtractor={(item, index) => index.toString()}
-      />
-    </SafeAreaView>
+    <FlatList
+      data={paymentHistory}
+      renderItem={({ item }) => <PaymentHistoryCard item={item} />}
+      keyExtractor={(item, index) => index.toString()}
+      contentContainerStyle={styles.container}
+    />
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
+    justifyContent: "center",
+    alignItems: "center",
     paddingTop: 20,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    color: "#333333",
+  outerMargin: {
+    backgroundColor: "#4F8585", // Color del margen
+    borderRadius: 10,
+    marginHorizontal: 20, // Margen horizontal para ajustar el ancho de la tarjeta
+    marginBottom: 10, // Margen inferior entre las tarjetas
   },
-  paymentItem: {
+  innerMargin: {
     backgroundColor: "#ffffff", // Fondo blanco
     borderRadius: 10,
-    padding: 5, // Reducido el padding
-    marginBottom: 15,
-    elevation: 3,
-    shadowColor: "#fff",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    margin: 5, // Margen interno para ajustar el espacio entre la tarjeta y el margen de color
   },
-  paymentItemBorder: {
+  paymentItem: {
+    padding: 12,
+  },
+  paymentItemContent: {
     borderRadius: 10,
-    borderWidth: 2,
-    borderColor: "#4F8585", // Color del borde deseado
-    padding: 10, // Aumentado el padding
+    padding: 10,
   },
-  amount: {
-    color: "#5D6921",
-    fontWeight: "bold",
+  amountContainer: {
+    backgroundColor: "#4F8585",
+    borderRadius: 5,
+    padding: 5,
     marginBottom: 5,
+    maxWidth: "50%", // Ajusta el ancho máximo del contenedor del monto
+  },
+  amountText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
 

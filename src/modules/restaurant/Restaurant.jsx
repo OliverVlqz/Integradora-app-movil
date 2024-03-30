@@ -10,12 +10,21 @@ const { height } = Dimensions.get('window');
 
 export default function Restaurant(props) {
     const {navigation} = props;
-    const { cartItems, addItemToCart } = useContext(CartFuction);
+    const { cartItems, addItemToCart, updateCartItem } = useContext(CartFuction); 
 
-    const agregarCarrito = (item) => {
-        addItemToCart(item);
-        navigation.navigate('Cart', { cartItems: [...cartItems, item] });
-      };
+    const agregarCarrito = (item, quantity) => {
+        const itemIndex = cartItems.findIndex(cartItem => cartItem.id === item.id);
+        if (itemIndex !== -1) {
+            const updatedCartItems = [...cartItems];
+            updatedCartItems[itemIndex].quantity += quantity;
+            updateCartItem(updatedCartItems[itemIndex]); 
+        } else {
+            addItemToCart({ ...item, quantity });
+        }
+        navigation.navigate('Cart');
+    };
+
+    
 
 
 const data =[
@@ -37,14 +46,14 @@ const data =[
     {
         type: 'restaurant',
         id: '2',
-        title: 'Bacalao',
+        title: 'Hamburguesa',
         description: 'Nuestra Cazuela de Bacalao presenta el bacalao en su salsa a la vizcaína, acompañado de esponjosito arroz blanco con verduras.',
         price: "$120.00",
         img: require('../../../assets/restaurante.jpg'),
         action: () => navigation.navigate('RestaurantDetail',
         {
             id: '2',
-            title: 'Bacalao',
+            title: 'Hamburguesa',
             description: 'Nuestra Cazuela de Bacalao presenta el bacalao en su salsa a la vizcaína, acompañado de esponjosito arroz blanco con verduras.',
             img: require('../../../assets/restaurante.jpg')
         }),
@@ -52,14 +61,14 @@ const data =[
     {
         type: 'restaurant',
         id: '3',
-        title: 'Bacalao',
+        title: 'Enchiladas',
         description: 'Nuestra Cazuela de Bacalao presenta el bacalao en su salsa a la vizcaína, acompañado de esponjosito arroz blanco con verduras.',
         price: "$120.00",
         img: require('../../../assets/restaurante.jpg'),
         action: () => navigation.navigate('RestaurantDetail',
         {
             id: '3',
-            title: 'Bacalao',
+            title: 'Enchiladas',
             description: 'Nuestra Cazuela de Bacalao presenta el bacalao en su salsa a la vizcaína, acompañado de esponjosito arroz blanco con verduras.',
             img: require('../../../assets/restaurante.jpg')
         }),
@@ -67,14 +76,14 @@ const data =[
     {
         type: 'restaurant',
         id: '4',
-        title: 'Bacalao',
+        title: 'Pozole',
         description: 'Nuestra Cazuela de Bacalao presenta el bacalao en su salsa a la vizcaína, acompañado de esponjosito arroz blanco con verduras.',
         price: "$120.00",
         img: require('../../../assets/restaurante.jpg'),
         action: () => navigation.navigate('RestaurantDetail',
         {
             id: '4',
-            title: 'Bacalao',
+            title: 'Pozole',
             description: 'Nuestra Cazuela de Bacalao presenta el bacalao en su salsa a la vizcaína, acompañado de esponjosito arroz blanco con verduras.',
             img: require('../../../assets/restaurante.jpg') 
         }),
@@ -105,7 +114,7 @@ const data =[
                     price={item.price}
                     image={item.img}
                     action={() => item.action()}
-                    customAction={() => agregarCarrito(item)}
+                    customAction={(quantity) => agregarCarrito(item, quantity)} 
                     isRestaurant={item.isRestaurant}
 
                 />)}

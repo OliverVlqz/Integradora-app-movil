@@ -7,6 +7,7 @@ import Habitaciones from "../../../assets/hotel.jpg"
 import {CartFuction} from '../cart/CartFuction';
 
 
+
 const { height } = Dimensions.get('window')
 export default function Rooms(props) {
     const {navigation} = props;
@@ -15,7 +16,7 @@ export default function Rooms(props) {
     
     const agregarCarrito = (item) => {
         addItemToCart(item);
-        navigation.navigate('Cart', { cartItems: [...cartItems, item] });
+        navigation.navigate('Cart');
       };
 
     const data =  [
@@ -25,7 +26,7 @@ export default function Rooms(props) {
         t_habitacion: 'Sencilla',
         t_cama: '1 cama matrimonial',
         capacidad: 'Capacidad para 2 personas',
-        precio: '$2.347.00',
+        price: '$2.347.00',
         image: require('../../../assets/hotel.jpg'),
         action: () => navigation.navigate('RoomDetail',
         {
@@ -33,7 +34,7 @@ export default function Rooms(props) {
             t_habitacion: 'Sencilla',
             t_cama: '1 cama matrimonial',
             capacidad: 'Capacidad para 2 personas',
-            precio: '$2.347.00',
+            price: '$2.347.00',
             image: require('../../../assets/hotel.jpg')
         }),
         customAction: () => navigation.navigate('Cart',
@@ -42,7 +43,7 @@ export default function Rooms(props) {
             t_habitacion: 'Sencilla',
             t_cama: '1 cama matrimonial',
             capacidad: 'Capacidad para 2 personas',
-            precio: '$2.347.00',
+            price: '$2.347.00',
             image: require('../../../assets/hotel.jpg')
 
         }
@@ -54,7 +55,7 @@ export default function Rooms(props) {
         t_habitacion: 'Junior Suite',
         t_cama: '1 cama King Size',
         capacidad: 'Capacidad para 2 personas',
-        precio: '$2,849.00',
+        price: '$2,849.00',
         image: require('../../../assets/hotel.jpg'),
         action: () => navigation.navigate('RoomDetail',
         {
@@ -62,7 +63,7 @@ export default function Rooms(props) {
             t_habitacion: 'Junior Suite',
             t_cama: '1 cama King Size',
             capacidad: 'Capacidad para 2 personas',
-            precio: '$2,849.00',
+            price: '$2,849.00',
             image: require('../../../assets/hotel.jpg')
         }),
         customAction: () => navigation.navigate('Cart',
@@ -71,7 +72,7 @@ export default function Rooms(props) {
             t_habitacion: 'Junior Suite',
             t_cama: '1 cama King Size',
             capacidad: 'Capacidad para 2 personas',
-            precio: '$2,849.00',
+            price: '$2,849.00',
             image: require('../../../assets/hotel.jpg')
         }),
     },
@@ -81,7 +82,7 @@ export default function Rooms(props) {
         t_habitacion: 'Senior Suite',
         t_cama: '2 camas matrimoniales',
         capacidad: 'Capacidad para 4 personas',
-        precio: '$3,482.00',
+        price: '$3,482.00',
         image: require('../../../assets/hotel.jpg'),
         action: () => navigation.navigate('RoomDetail',
         {
@@ -89,7 +90,7 @@ export default function Rooms(props) {
             t_habitacion: 'Senior Suite',
             t_cama: '2 camas matrimoniales',
             capacidad: 'Capacidad para 4 personas',
-            precio: '$3,482.00',
+            price: '$3,482.00',
             image: require('../../../assets/hotel.jpg')
         }),
         customAction: () => navigation.navigate('Cart',
@@ -98,7 +99,7 @@ export default function Rooms(props) {
             t_habitacion: 'Senior Suite',
             t_cama: '2 camas matrimoniales',
             capacidad: 'Capacidad para 4 personas',
-            precio: '$3,482.00',
+            price: '$3,482.00',
             image: require('../../../assets/hotel.jpg')
         }),
     },
@@ -108,7 +109,7 @@ export default function Rooms(props) {
         t_habitacion: 'Master Suite',
         t_cama: '1 cama King Size',
         capacidad: 'Capacidad para 2 personas',
-        precio: '$2,850.00',
+        price: '$2,850.00',
         image: require('../../../assets/hotel.jpg'),
         action: () => navigation.navigate('RoomDetail',
         {
@@ -116,7 +117,7 @@ export default function Rooms(props) {
             t_habitacion: 'Master Suite',
             t_cama: '1 cama King Size',
             capacidad: 'Capacidad para 2 personas',
-            precio: '$2,850.00',
+            price: '$2,850.00',
             image: require('../../../assets/hotel.jpg')
         }),
         customAction: () => navigation.navigate('Cart',
@@ -125,7 +126,7 @@ export default function Rooms(props) {
             t_habitacion: 'Master Suite',
             t_cama: '1 cama King Size',
             capacidad: 'Capacidad para 2 personas',
-            precio: '$2,850.00',
+            price: '$2,850.00',
             image: require('../../../assets/hotel.jpg')
         }),
     },
@@ -152,7 +153,7 @@ export default function Rooms(props) {
                     t_habitacion={item.t_habitacion}
                     t_cama={item.t_cama}
                     capacidad={item.capacidad}
-                    precio={item.precio}
+                    price={item.price}
                     image={item.image}
                     action={() => item.action()}
                     //customAction={() => item.customAction()}

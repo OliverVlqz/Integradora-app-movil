@@ -9,6 +9,10 @@ export default function CreateAccount(props){
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(true);
+    const [confirmPassword, setConfirmPassword] = useState(""); 
+    const [firstName, setFirstName] = useState(""); 
+    const [lastName, setLastName] = useState(""); 
+    const [maternalLastName, setMaternalLastName] = useState(""); 
     const [showMessage, setShowMessage] = useState('');
 
     const register = () => {
@@ -41,6 +45,37 @@ export default function CreateAccount(props){
                     style={styles.logo}
                     resizeMode="contain"
                 />
+                 <Input
+                            placeholder="Nombre"
+                            label="Nombre:"
+                            onChange={({ nativeEvent: { text } }) => setFirstName(text)}
+                            labelStyle={styles.label}
+                            containerStyle={styles.input}
+                            inputStyle={{ color: '#fff' }}
+                        />
+                    
+                <View style={styles.namesContainer}>
+                    <View style={styles.nameInput}>
+                        <Input
+                            placeholder="Apellido Paterno"
+                            label="Apellido Paterno:"
+                            onChange={({ nativeEvent: { text } }) => setLastName(text)}
+                            labelStyle={styles.label}
+                            containerStyle={styles.input}
+                            inputStyle={{ color: '#fff' }}
+                        />
+                    </View>
+                    <View style={styles.nameInput}>
+                        <Input
+                            placeholder="Apellido Materno"
+                            label="Apellido Materno:"
+                            onChange={({ nativeEvent: { text } }) => setMaternalLastName(text)}
+                            labelStyle={styles.label}
+                            containerStyle={styles.input}
+                            inputStyle={{ color: '#fff' }}
+                        />
+                    </View>
+                </View>
                 <Input
                     placeholder="example@example.com"
                     label="Correo electrónico: *"
@@ -48,7 +83,7 @@ export default function CreateAccount(props){
                     onChange={({ nativeEvent: { text } }) => setEmail(text)}
                     labelStyle={styles.label}
                     containerStyle={styles.input}
-                    inputStyle={{ color: '#fff' }} // Establece el color del texto escrito
+                    inputStyle={{ color: '#fff' }} 
                     errorMessage={showMessage}
                     rightIcon={
                         <Icon
@@ -65,7 +100,25 @@ export default function CreateAccount(props){
                     onChange={({ nativeEvent: { text } }) => setPassword(text)}
                     labelStyle={styles.label}
                     containerStyle={styles.input}
-                    inputStyle={{ color: '#fff' }} // Establece el color del texto escrito
+                    inputStyle={{ color: '#fff' }} 
+                    secureTextEntry={showPassword}
+                    rightIcon={
+                        <Icon
+                            type="material-community"
+                             name={showPassword ? 'eye-outline' : 'eye-off-outline'}
+                            color='#fff'
+                            onPress={() => setShowPassword(!showPassword)}
+                        />
+                    }
+                    errorMessage={showMessage}
+                />
+                <Input
+                    placeholder="*******"
+                    label="Confirmar contraseña: *"
+                    onChange={({ nativeEvent: { text } }) => setConfirmPassword(text)}
+                    labelStyle={styles.label}
+                    containerStyle={styles.input}
+                    inputStyle={{ color: '#fff' }} 
                     secureTextEntry={showPassword}
                     rightIcon={
                         <Icon
@@ -75,34 +128,16 @@ export default function CreateAccount(props){
                             onPress={() => setShowPassword(!showPassword)}
                         />
                     }
-                    errorMessage={showMessage}
+                    errorMessage={showMessage}           
                 />
-                            <Input
-                placeholder="*******"
-                label="Confirmar contraseña: *"
-                onChange={({ nativeEvent: { text } }) => setConfirmPassword(text)}
-                labelStyle={styles.label}
-                containerStyle={styles.input}
-                inputStyle={{ color: '#fff' }} // Establece el color del texto escrito
-                secureTextEntry={showPassword}
-                rightIcon={
-                    <Icon
-                        type="material-community"
-                        name={showPassword ? 'eye-outline' : 'eye-off-outline'}
-                        color='#fff'
-                        onPress={() => setShowPassword(!showPassword)}
-                    />
-                }
-                errorMessage={showMessage}           
-                 />
 
-            <Button
-                title='Registrarse'
-                onPress={register}
-                containerStyle={styles.btnContainer}
-                buttonStyle={styles.buttonStyle}
-                titleStyle={{ color: "black" }}
-            />
+                <Button
+                    title='Registrarse'
+                    onPress={register}
+                    containerStyle={styles.btnContainer}
+                    buttonStyle={styles.buttonStyle}
+                    titleStyle={{ color: "black" }}
+                />
             </View>
         </ImageBackground>
     );
@@ -139,4 +174,14 @@ const styles = StyleSheet.create({
     btnContainer: {
         width: '80%'
     },
+    namesContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+        marginBottom: 8
+    },
+    nameInput: {
+        flex: 1,
+        paddingHorizontal: 8
+    }
 });

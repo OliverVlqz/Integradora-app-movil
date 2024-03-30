@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Image } from '@rneui/base';
 
 export default function FlatListRoom(props) {
-    const { id, t_habitacion, t_cama, capacidad, precio, image, customAction, action } = props;
+    const { id, t_habitacion, t_cama, capacidad, price, image, customAction, action } = props;
 
     return (
         <View style={styles.row}>
@@ -19,7 +19,7 @@ export default function FlatListRoom(props) {
                 <View style={styles.descriptionContainer}>
                     <Text style={styles.t_cama}>{t_cama}</Text>
                     <Text style={styles.capacidad}>{capacidad}</Text>
-                    <Text style={styles.precio}>{precio}</Text>
+                    <Text style={styles.precio}>{price}</Text>
                 </View>
 
                 <View style={{ flexDirection: 'row' }}>

@@ -3,7 +3,7 @@ import React, {useState} from 'react'
 import { Image } from '@rneui/base'
 
 export default function FlatListRestaurant(props) {
-    const {id, title, description, price, image, action, customAction, isRestaurant} = props;
+    const {id, title, description, price, image, action, customAction} = props;
     const [quantity, setQuantity] = useState(1);
 
     const increaseQuantity = () => {
@@ -45,7 +45,7 @@ export default function FlatListRestaurant(props) {
                     <Text style={styles.quantityButton}>+</Text>
                 </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.reserveButton} onPress={customAction}>
+            <TouchableOpacity style={styles.reserveButton} onPress={() => props.customAction(quantity)}>
                 <Text style={styles.reserveButtonText}>Agregar</Text>
             </TouchableOpacity>
         </View>

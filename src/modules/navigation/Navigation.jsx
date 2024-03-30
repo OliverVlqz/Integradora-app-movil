@@ -49,22 +49,24 @@ export default function Navigation() {
 
         <Tab.Screen name="Login"
           component={Login}
-          options={{ title: "Inicio de sesión" }}
+          options={{ title: "Inicio de sesión", headerShown: false}}
         />
 
         <Tab.Screen name='CreateAccount'
           component={CreateAccount}
-          options={{ title: "Crea tu cuenta" }}
+          options={{ title: "Crea tu cuenta", headerShown: false}}
         />
 
         <Tab.Screen
           name="HomeStack"
           component={HomeStack}
           options={{
+            headerShown: false,
             headerTitle: props => <CustomHeaderTitle title="Real del Valle" />,
             headerTitleAlign: 'center',
             title: "Inicio"
           }}
+          
         />
 
         <Tab.Screen
