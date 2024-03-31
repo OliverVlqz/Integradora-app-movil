@@ -1,14 +1,17 @@
 import React from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
 
+
+
 const PaymentHistoryCard = ({ item }) => {
+
   return (
     <View style={styles.outerMargin}>
       <View style={styles.innerMargin}>
         <View style={styles.paymentItem}>
           <View style={styles.paymentItemContent}>
             <View style={styles.amountContainer}>
-              <Text style={styles.amountText}>Monto: ${item.amount}</Text>
+              <Text style={styles.amountText}>Monto: ${total}</Text>
             </View>
             <Text>Fecha: {item.date.toLocaleString()}</Text>
           </View>

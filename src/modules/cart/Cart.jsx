@@ -9,27 +9,31 @@ import {
 import { Image } from "@rneui/base";
 import { CartFuction } from "./CartFuction";
 import _ from "lodash";
+import { useNavigation } from '@react-navigation/native';
 
-export default function Cart({ route }) {
+
+export default function Cart({ route, navigation }) {
 
   const { cartItems, removeCartItem } = useContext(CartFuction);
   
-  const calcularSubtotal = () => {
-    let subtotal = 0;
-    cartItems.forEach(item => {
-if (item.type === 'restaurant' && item.type === 'miscellaneous') {
-  subtotal += item.quantity * parseFloat(item.price.slice(1));
-}else{
-  subtotal +=parseFloat(item.price.slice(1));
 
-}      
-    });
-    return subtotal.toFixed(2);
-  };
   
+const calcularSubtotal = () => {
+  let subtotal = 0;
+  cartItems.forEach(item => {
+      const priceNumber = parseFloat(item.price.replace(/[^\d.]/g, ""));
+      if (!isNaN(priceNumber)) {
+          subtotal += item.type === 'restaurant' || item.type === 'miscellaneous'
+              ? item.quantity * priceNumber
+              : priceNumber;
+      }
+  });
+  return subtotal.toFixed(2);
+};
+
   const calcularTotal = () => {
     const subtotal = parseFloat(calcularSubtotal());
-    const impuestos = subtotal * 0.16; // Suponiendo que los impuestos son el 15% del subtotal
+    const impuestos = subtotal * 0.16; 
     return (subtotal + impuestos).toFixed(2);
   };
   
@@ -40,10 +44,13 @@ if (item.type === 'restaurant' && item.type === 'miscellaneous') {
     });
 
     const calculateTotalPrice = (item) => {
-      const priceWithoutCurrencySymbol = parseFloat(item.price.slice(1));
-      return (item.quantity * priceWithoutCurrencySymbol).toFixed(2);
+      if (item.quantity && item.price) {
+        const priceWithoutCurrencySymbol = parseFloat(item.price.slice(1));
+        return (item.quantity * priceWithoutCurrencySymbol).toFixed(2);
+      }
+      return '0.00';
     };
-
+    
     const totalPrice = calculateTotalPrice(item, cartItems);
 
     switch (item.type) {
@@ -57,6 +64,12 @@ if (item.type === 'restaurant' && item.type === 'miscellaneous') {
               <Text style={styles.capacidad}>{item.capacidad}</Text>
               <Text style={styles.precio}>{item.price}</Text>
             </View>
+            <TouchableOpacity
+                style={styles.detailsButton}
+                onPress={() => removeCartItem(item)}
+              >
+                <Text style={styles.detailsButtonText}>Eliminar</Text>
+              </TouchableOpacity>
           </View>
         );
       case "restaurant":
@@ -89,26 +102,43 @@ if (item.type === 'restaurant' && item.type === 'miscellaneous') {
       case "spa":
         return (
           <View style={styles.row}>
+            
             <Image source={item.image} style={styles.imageCard} />
 
             <View>
               <Text style={styles.t_habitacion}>{item.title}</Text>
 
               <Text style={styles.textDescription}>{descriptionSnippet}</Text>
-              <Text style={styles.precio}>{item.precio}</Text>
+              <Text style={styles.precio}>{item.price}</Text>
+              <TouchableOpacity
+                style={styles.detailsButton}
+                onPress={() => removeCartItem(item)}
+              >
+                <Text style={styles.detailsButtonText}>Eliminar</Text>
+              </TouchableOpacity>
             </View>
+            
           </View>
         );
       case "miscellaneous":
         return (
           <View style={styles.row}>
+                        <Image source={item.img} style={styles.imageCard} />
+
             <View>
               <Text style={styles.t_habitacion}>{item.title}</Text>
-              <Text style={styles.t_cama}>{item.precio}</Text>
+              {/* <Text style={styles.t_cama}>{item.price}</Text> */}
             </View>
-            <TouchableOpacity style={styles.detailsButton}>
-              <Text style={styles.detailsButtonText}></Text>
-            </TouchableOpacity>
+            <Text style={styles.precio}>Cantidad: {item.quantity} </Text>
+                <Text style={styles.precio}>
+                  Precio Total: ${calculateTotalPrice(item) }
+                </Text>
+                <TouchableOpacity
+                style={styles.detailsButton}
+                onPress={() => removeCartItem(item)}
+              >
+                <Text style={styles.detailsButtonText}>Eliminar</Text>
+              </TouchableOpacity>
           </View>
         );
       default:
@@ -137,7 +167,7 @@ if (item.type === 'restaurant' && item.type === 'miscellaneous') {
         <View style={{ flexDirection: "row" }}>
           <Text style={{ flexDirection: "row" }}>Impuestos:</Text>
           <Text style={{ flexDirection: "row" }}> </Text>
-          <Text style={{ flexDirection: "row" }}> ${parseFloat(calcularSubtotal()) * 0.16}</Text>
+          <Text style={{ flexDirection: "row" }}> ${parseFloat((calcularSubtotal() * 0.16).toFixed(2))}</Text>
         </View>
 
         <View style={styles.linea}></View>
@@ -148,13 +178,15 @@ if (item.type === 'restaurant' && item.type === 'miscellaneous') {
         </View>
 
         <View style={{ flexDirection: "column", padding: 10 }}>
-          <TouchableOpacity style={styles.reserveButton}>
-            <Text style={styles.reserveButtonText}>Pagar</Text>
+          <TouchableOpacity style={styles.reserveButton} onPress={() => navigation.navigate('PayInfo', { cartItems: cartItems, subtotal: calcularSubtotal(), impuestos: calcularSubtotal() * 0.16, total: calcularTotal() })}>
+              <Text style={styles.reserveButtonText}>Pagar</Text>
           </TouchableOpacity>
+
+
         </View>
 
         <View style={{ flexDirection: "column", padding: 5 }}>
-          <TouchableOpacity style={styles.detailsButton} onPress={""}>
+          <TouchableOpacity style={styles.detailsButton} onPress={() => navigation.navigate('Home')}>
             <Text style={styles.detailsButtonText}>Agregar Servicios</Text>
           </TouchableOpacity>
         </View>

@@ -13,12 +13,12 @@ export default function CreateAccount(props){
     const [firstName, setFirstName] = useState(""); 
     const [lastName, setLastName] = useState(""); 
     const [maternalLastName, setMaternalLastName] = useState(""); 
-    const [showMessage, setShowMessage] = useState('');
+    const [showMessage, setShowMessage] = useState({email: '', password: '', confirmPassword: '', firstName: '', lastName: '', maternalLastName: ''});
 
     const register = () => {
         if (!isEmpty(email) && !isEmpty(password) && !isEmpty(confirmPassword)) {
             if (password === confirmPassword) {
-                setShowMessage('');
+                setShowMessage({email: '', password: '', confirmPassword: ''});
                 createUserWithEmailAndPassword(auth, email, password)
                     .then((userCredential) => {
                         console.log('Usuario registrado:', userCredential.user.uid);
@@ -30,10 +30,10 @@ export default function CreateAccount(props){
                         setShowMessage(errorMessage);
                     });
             } else {
-                setShowMessage('Las contraseñas no coinciden');
+                setShowMessage({email: '', password: '', confirmPassword: 'Las contraseñas no coinciden'});
             }
         } else {
-            setShowMessage('Todos los campos son obligatorios');
+            setShowMessage({email: 'Campo obligatorio', password: 'Campo obligatorio', confirmPassword: 'Campo obligatorio', firstName: 'Campo obligatorio', lastName: 'Campo obligatorio', maternalLastName: 'Campo obligatorio'});
         }
     }
 
@@ -52,6 +52,7 @@ export default function CreateAccount(props){
                             labelStyle={styles.label}
                             containerStyle={styles.input}
                             inputStyle={{ color: '#fff' }}
+                            errorMessage={showMessage.firstName}
                         />
                     
                 <View style={styles.namesContainer}>
@@ -63,6 +64,7 @@ export default function CreateAccount(props){
                             labelStyle={styles.label}
                             containerStyle={styles.input}
                             inputStyle={{ color: '#fff' }}
+                            errorMessage={showMessage.lastName}
                         />
                     </View>
                     <View style={styles.nameInput}>
@@ -73,6 +75,7 @@ export default function CreateAccount(props){
                             labelStyle={styles.label}
                             containerStyle={styles.input}
                             inputStyle={{ color: '#fff' }}
+                            errorMessage={showMessage.maternalLastName}
                         />
                     </View>
                 </View>
@@ -84,7 +87,7 @@ export default function CreateAccount(props){
                     labelStyle={styles.label}
                     containerStyle={styles.input}
                     inputStyle={{ color: '#fff' }} 
-                    errorMessage={showMessage}
+                    errorMessage={showMessage.email}
                     rightIcon={
                         <Icon
                             type="material-community"
@@ -110,7 +113,7 @@ export default function CreateAccount(props){
                             onPress={() => setShowPassword(!showPassword)}
                         />
                     }
-                    errorMessage={showMessage}
+                    errorMessage={showMessage.password}
                 />
                 <Input
                     placeholder="*******"
@@ -128,7 +131,7 @@ export default function CreateAccount(props){
                             onPress={() => setShowPassword(!showPassword)}
                         />
                     }
-                    errorMessage={showMessage}           
+                    errorMessage={showMessage.confirmPassword}           
                 />
 
                 <Button

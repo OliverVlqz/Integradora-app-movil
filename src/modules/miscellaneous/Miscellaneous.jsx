@@ -11,51 +11,67 @@ const { height } = Dimensions.get('window');
 
 export default function Miscellaneous(props) {
     const {navigation} = props;
-    const { cartItems, addItemToCart } = useContext(CartFuction);
-    const agregarCarrito = (item) => {
-        addItemToCart(item);
-        navigation.navigate('Cart', { cartItems: [...cartItems, item] });
-      };
+    const { cartItems, addItemToCart, updateCartItem } = useContext(CartFuction); 
+
+    const agregarCarrito = (item, quantity) => {
+        const itemIndex = cartItems.findIndex(cartItem => cartItem.id === item.id);
+        if (itemIndex !== -1) {
+            const updatedCartItems = [...cartItems];
+            updatedCartItems[itemIndex].quantity += quantity;
+            updateCartItem(updatedCartItems[itemIndex]); 
+        } else {
+            addItemToCart({ ...item, quantity });
+        }
+        navigation.navigate('Cart');
+    };
+
 
       const data = [
         {
             type: 'miscellaneous',
-            id: '1', 
+            id: '1M', 
             title: 'Jabón de baño',
-            precio: '$30.00'
+            price: '$30.00',
+            img: require('../../../assets/miscelaneos.jpg'),    
         },
         {
             type: 'miscellaneous',
-            id: '2', 
+            id: '2M', 
             title: 'Champú',
-            precio: '$30.00'
+            price: '$30.00',
+            img: require('../../../assets/miscelaneos.jpg'),
         },
         {
             type: 'miscellaneous',
-            id: '3', 
+            id: '3M', 
             title: 'Crema corporal',
-            precio: '$30.00'
+            price: '$30.00',
+            img: require('../../../assets/miscelaneos.jpg'),
         },
         {
             type: 'miscellaneous',
-            id: '4', 
+            id: '4M', 
             title: 'Cepillo de dientes',
-            precio: '$30.00'
+            price: '$30.00',
+            img: require('../../../assets/miscelaneos.jpg'),
         },
         {
             type: 'miscellaneous',
-            id: '5', 
+            id: '5M', 
             title: 'Crema para afeitar',
-            precio: '$30.00'
+            price: '$30.00',
+            img: require('../../../assets/miscelaneos.jpg'),
         },
         {
             type: 'miscellaneous',
-            id: '6', 
+            id: '6M', 
             title: 'Cepillo para cabello',
-            precio: '$30.00'
+            price: '$30.00',
+            img: require('../../../assets/miscelaneos.jpg'),
         },
     ]
 
+    
     return (
         <View style={styles.container}>
             <View style={styles.imageContainer}>
@@ -73,9 +89,10 @@ export default function Miscellaneous(props) {
                 renderItem={({item}) =>(
                     <FlatListMiscellaneous
                         title={item.title}
-                        precio={item.precio}
+                        price={item.price}
+                        image={item.img}
                         action={() => item.action()}
-                        customAction={() => agregarCarrito(item)}
+                        customAction={(quantity) => agregarCarrito(item, quantity)} 
                     />
                 )}
                 keyExtractor={item => item.id}

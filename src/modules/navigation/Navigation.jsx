@@ -12,6 +12,7 @@ import Logo from "../../../assets/Logo.png"
 import HomeStack from '../../modules/stack/HomeStack.jsx'
 import { Icon } from '@rneui/base'
 import Profile from '../auth/adapters/screens/Profile.jsx'
+import Cart from '../cart/Cart.jsx';
 
 
 const Tab = createBottomTabNavigator();
@@ -68,6 +69,22 @@ export default function Navigation() {
           }}
           
         />
+         <Tab.Screen
+          name="Cart"
+          component={Cart}
+          options={{
+            title: 'Carrito',
+            headerStyle: {
+                backgroundColor: '#7E8D56'
+            },
+            headerRight: () => (
+                <Image
+                    source={Logo}
+                    style={{ width: 40, height: 30, marginRight: 10 }}
+                />
+            )
+        }}
+        />
 
         <Tab.Screen
           name="Profile"
@@ -104,6 +121,10 @@ const getIconName = (routeName, focused) => {
       break;
     case 'Login':
       iconName = focused ? 'login' : 'login';
+      break;
+
+    case 'Cart':
+      iconName = focused ? 'cart': 'cart';
       break;
     case 'Profile':
       iconName = focused ? 'account-circle' : 'account-circle';

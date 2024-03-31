@@ -12,42 +12,46 @@ const { height } = Dimensions.get('window');
 export default function Spa(props) {
     const {navigation} = props;
     const { cartItems, addItemToCart } = useContext(CartFuction);
+
+
+    
     const agregarCarrito = (item) => {
         addItemToCart(item);
-        navigation.navigate('Cart', { cartItems: [...cartItems, item] });
+        navigation.navigate('Cart');
       };
+
 
 const data = [
     {
         type:'spa',
-        id: '1',
+        id: '1S',
         title: 'Body Sculpt',
         description: '3 masajes reductivos',
-        precio: '$1,549.00 MXN',
+        price: '$1,549.00 MXN',
         image: require('../../../assets/spa.jpg'),
     },
     {
         type:'spa',
-        id: '2',
+        id: '2S',
         title: 'Renovación Deluxe',
         description: '3 drenajes linfáticos',
-        precio: '$1,629.00 MXN',
+        price: '$1,629.00 MXN',
         image: require('../../../assets/spa.jpg'),
     },
     {
         type:'spa',
-        id: '3',
+        id: '3S',
         title: 'Masaje en Pareja',
         description: '+ Infusión relajante + Aromaterapia',
-        precio: '$1,869.00 MXN',
+        price: '$1,869.00 MXN',
         image: require('../../../assets/spa.jpg'),
     },
     {
         type:'spa',
-        id: '4',
+        id: '4S',
         title: 'Golden',
         description: '+ Relajante holístico + Relajante sueco',
-        precio: '$1,429.00 MXN',
+        price: '$1,429.00 MXN',
         image: require('../../../assets/spa.jpg'),
     },
 ];
@@ -63,13 +67,14 @@ const data = [
                     <Text style={styles.text}>Paquetes Spa</Text>
                 </View>
             </View>
+
             <FlatList
                 data={data}
                 renderItem={({ item }) => (
                 <FlatListSpa 
                     title={item.title}
                     description={item.description}
-                    precio={item.precio}
+                    price={item.price}
                     image={item.image}
                     action={() => item.action()}
                     customAction={() => agregarCarrito(item)}

@@ -1,11 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, Alert } from "react-native";
 import Tarjeta from '../../../assets/tarjeta.png'
 import Modal from "react-native-modal";
-import PaymentHistory from '../paymentHistory/PaymentHistory'
 
 const PayInfo = ({ route, navigation }) => {
-  const { cartItems } = route.params;
+  const { cartItems, subtotal, impuestos, total } = route.params;
+  const navigation = useNavigation();
+
+
+// const payment =()=>{
+//   const paymentInfo ={amount: total, date: new Date()};
+//   addPaymentHistory(paymentInfo);
+//   navigation.goBack();
+// }
 
   const [cardInfo, setCardInfo] = useState({
     cardNumber: "",
@@ -14,34 +21,67 @@ const PayInfo = ({ route, navigation }) => {
     cvv: ""
   });
 
-  
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+
+  useEffect(() => {
+    setIsButtonDisabled(!validateCardInfo());
+  }, [cardInfo]);
 
   const handlePayment = () => {
-    console.log("Información de la tarjeta:", cardInfo);
-    // Mostrar mensaje de pago exitoso
-    setIsModalVisible(true);
+    if (validateCardInfo()) {
+      console.log("Información de la tarjeta:", cardInfo);
+      setIsModalVisible(true);
+    } else {
+      Alert.alert("Error", "Por favor, complete correctamente todos los campos de la tarjeta.");
+    }
   };
-  
 
+  const validateCardInfo = () => {
+    if (!cardInfo.cardNumber || !cardInfo.cardHolder || !cardInfo.expiryDate || !cardInfo.cvv) {
+      return false;
+    }
+    if (cardInfo.cardNumber.replace(/\D/g, '').length !== 16) {
+      return false;
+    }
+    const expiryDatePattern = /^(0[1-9]|1[0-2])\/([0-9]{2})$/;
+    if (!expiryDatePattern.test(cardInfo.expiryDate)) {
+      return false;
+    }
+    // Validar el CVV (debe tener 3 dígitos)
+    if (cardInfo.cvv.replace(/\D/g, '').length !== 3) {
+      return false;
+    }
+    return true;
+  };
+
+  const formatCardNumber = (input) => {
+    // Eliminar caracteres no numéricos
+    const cardNumber = input.replace(/\D/g, '');
+    // Agrupar en bloques de 4 dígitos
+    return cardNumber.replace(/(.{4})/g, '$1 ').trim();
+  };
+
+  const formatExpiryDate = (input) => {
+    // Eliminar caracteres no numéricos
+    const expiryDate = input.replace(/\D/g, '');
+    // Insertar '/' después del segundo dígito (mes)
+    return expiryDate.replace(/^(.{2})/, '$1/');
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.resumen}>
         <Text style={styles.title}>Resumen</Text>
-
         <View style={styles.resumenItem}>
-          <Text>Subtotal: $</Text>
+          <Text>Subtotal: ${subtotal}</Text>
         </View>
-
         <View style={[styles.resumenItem, styles.noBorder]}>
-          <Text>Impuestos: $</Text>
+          <Text>Impuestos: ${impuestos.toFixed(2)}</Text>
         </View>
-
         <View style={styles.linea}></View>
-
         <View style={styles.resumenItem}>
-          <Text>Total: $</Text>
+          <Text>Total: ${total}</Text>
         </View>
       </View>
 
@@ -53,8 +93,10 @@ const PayInfo = ({ route, navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Número de tarjeta"
-          value={cardInfo.cardNumber}
+          maxLength={19} // Permitir hasta 19 caracteres (16 dígitos + 3 espacios)
+          value={formatCardNumber(cardInfo.cardNumber)}
           onChangeText={(text) => setCardInfo({ ...cardInfo, cardNumber: text })}
+          keyboardType="numeric"
         />
         <TextInput
           style={styles.input}
@@ -65,16 +107,23 @@ const PayInfo = ({ route, navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Fecha de expiración (MM/YY)"
-          value={cardInfo.expiryDate}
+          maxLength={5} // Permitir solo 5 caracteres (MM/YY)
+          value={formatExpiryDate(cardInfo.expiryDate)}
           onChangeText={(text) => setCardInfo({ ...cardInfo, expiryDate: text })}
+          keyboardType="numeric"
         />
         <TextInput
           style={styles.input}
           placeholder="CVV"
+          maxLength={3} // Permitir solo 3 dígitos
           value={cardInfo.cvv}
           onChangeText={(text) => setCardInfo({ ...cardInfo, cvv: text })}
+          keyboardType="numeric"
         />
-        <TouchableOpacity style={styles.reserveButton} onPress={handlePayment}>
+        <TouchableOpacity 
+          style={[styles.reserveButton, isButtonDisabled && styles.disabledButton]} 
+          onPress={handlePayment}
+          disabled={isButtonDisabled}>
           <Text style={styles.reserveButtonText}>Pagar</Text>
         </TouchableOpacity>
       </View>
@@ -136,6 +185,9 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 5,
     alignItems: "center",
+  },
+  disabledButton: {
+    backgroundColor: "#ccc",
   },
   reserveButtonText: {
     color: "white",

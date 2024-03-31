@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, SafeAreaView, ScrollView, ImageBackground } fro
 import PaymentHistory from "../../../paymentHistory/PaymentHistory";
 import Hotel from '../../../../../assets/hotel.jpg';
 
+
 const Profile = () => {
     const paymentHistory = [
         { amount: 10, date: new Date() },

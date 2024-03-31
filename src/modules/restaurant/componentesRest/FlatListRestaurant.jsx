@@ -17,6 +17,7 @@ export default function FlatListRestaurant(props) {
         }
     };
 
+    
   return (
     <View style={styles.row}>
     <Image

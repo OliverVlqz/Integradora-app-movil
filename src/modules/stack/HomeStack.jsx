@@ -13,6 +13,7 @@ import { Image } from '@rneui/base'
 import PayInfo from '../pay/PayInfo.jsx'
 
 
+
 const Stack = createStackNavigator();
 
 export default function HomeStack() {

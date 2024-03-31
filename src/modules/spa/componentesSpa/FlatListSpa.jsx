@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Image } from '@rneui/base';
 
 export default function FlatListSpa(props) {
-    const {id, title, description, precio, image, customAction, action} = props;
+    const {id, title, description, price, image, customAction, action} = props;
     return (
         <View style={styles.row}>
             <Image
@@ -17,7 +17,7 @@ export default function FlatListSpa(props) {
 
                 <View style={styles.descriptionContainer}>
                     <Text style={styles.description}>{description}</Text>
-                    <Text style={styles.description}>{precio}</Text>
+                    <Text style={styles.description}>{price}</Text>
                 </View>
 
                 <View style={{ flexDirection: 'row' }}>
