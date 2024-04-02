@@ -1,41 +1,68 @@
 import React, { useState } from "react";
-import { View, StyleSheet, ImageBackground } from 'react-native';
+import { View, StyleSheet, ImageBackground, Text} from 'react-native';
 import { Input, Button, Image, Icon } from "@rneui/base"
 import Fondo from '../../../../../assets/hotel.jpg'
 import Logo from '../../../../../assets/Logo.png'
+import axios from 'axios';
 
-export default function CreateAccount(props){
-    const { navigation } = props;
+const DEFAULT_ROLE = 3;
+
+
+export default function CreateAccount({ navigation }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [showPassword, setShowPassword] = useState(true);
     const [confirmPassword, setConfirmPassword] = useState(""); 
+    const [showPassword, setShowPassword] = useState(true);
     const [firstName, setFirstName] = useState(""); 
     const [lastName, setLastName] = useState(""); 
     const [maternalLastName, setMaternalLastName] = useState(""); 
-    const [showMessage, setShowMessage] = useState({email: '', password: '', confirmPassword: '', firstName: '', lastName: '', maternalLastName: ''});
+    const [showMessage, setShowMessage] = useState('');
 
-    const register = () => {
-        if (!isEmpty(email) && !isEmpty(password) && !isEmpty(confirmPassword)) {
-            if (password === confirmPassword) {
-                setShowMessage({email: '', password: '', confirmPassword: ''});
-                createUserWithEmailAndPassword(auth, email, password)
-                    .then((userCredential) => {
-                        console.log('Usuario registrado:', userCredential.user.uid);
-                    })
-                    .catch((error) => {
-                        const errorCode = error.code;
-                        const errorMessage = error.message;
-                        console.error('Error al registrar:', errorCode, errorMessage);
-                        setShowMessage(errorMessage);
-                    });
-            } else {
-                setShowMessage({email: '', password: '', confirmPassword: 'Las contraseñas no coinciden'});
+    const register = async () => {
+        try {
+            if (!email || !password || !confirmPassword || !firstName || !lastName || !maternalLastName) {
+                setShowMessage('Todos los campos son obligatorios');
+                return;
             }
-        } else {
-            setShowMessage({email: 'Campo obligatorio', password: 'Campo obligatorio', confirmPassword: 'Campo obligatorio', firstName: 'Campo obligatorio', lastName: 'Campo obligatorio', maternalLastName: 'Campo obligatorio'});
+
+            if (password !== confirmPassword) {
+                setShowMessage('Las contraseñas no coinciden');
+                return;
+            }
+
+            // Puedes agregar más validaciones aquí, como el formato del correo electrónico, la seguridad de la contraseña, etc.
+
+            const url = 'http://192.168.0.10:8080/api/usuario/registro/';
+            const data = {
+                correo: email,
+                contrasena: password,
+                nombre: firstName,
+                apellidoP: lastName,
+                apellidoM: maternalLastName,
+                status: true,
+                role: {
+                    id_role: DEFAULT_ROLE 
+                }
+    
+            };
+    
+            const response = await axios.post(url, data, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.data) {
+                throw new Error('No se recibieron datos del servidor');
+            }
+
+            navigation.navigate('Login');
+        } catch (error) {
+            console.error('Error:', error.message);
+            setShowMessage('Error al registrar, por favor intenta nuevamente');
         }
-    }
+    };
+    
 
     return (
         <ImageBackground source={Fondo} style={styles.background}>
@@ -45,16 +72,14 @@ export default function CreateAccount(props){
                     style={styles.logo}
                     resizeMode="contain"
                 />
-                 <Input
-                            placeholder="Nombre"
-                            label="Nombre:"
-                            onChange={({ nativeEvent: { text } }) => setFirstName(text)}
-                            labelStyle={styles.label}
-                            containerStyle={styles.input}
-                            inputStyle={{ color: '#fff' }}
-                            errorMessage={showMessage.firstName}
-                        />
-                    
+                <Input
+                    placeholder="Nombre"
+                    label="Nombre:"
+                    onChange={({ nativeEvent: { text } }) => setFirstName(text)}
+                    labelStyle={styles.label}
+                    containerStyle={styles.input}
+                    inputStyle={{ color: '#fff' }}
+                />
                 <View style={styles.namesContainer}>
                     <View style={styles.nameInput}>
                         <Input
@@ -64,7 +89,6 @@ export default function CreateAccount(props){
                             labelStyle={styles.label}
                             containerStyle={styles.input}
                             inputStyle={{ color: '#fff' }}
-                            errorMessage={showMessage.lastName}
                         />
                     </View>
                     <View style={styles.nameInput}>
@@ -75,7 +99,6 @@ export default function CreateAccount(props){
                             labelStyle={styles.label}
                             containerStyle={styles.input}
                             inputStyle={{ color: '#fff' }}
-                            errorMessage={showMessage.maternalLastName}
                         />
                     </View>
                 </View>
@@ -87,7 +110,7 @@ export default function CreateAccount(props){
                     labelStyle={styles.label}
                     containerStyle={styles.input}
                     inputStyle={{ color: '#fff' }} 
-                    errorMessage={showMessage.email}
+                    errorMessage={showMessage}
                     rightIcon={
                         <Icon
                             type="material-community"
@@ -96,9 +119,8 @@ export default function CreateAccount(props){
                         />
                     }
                 />
-
                 <Input
-                    placeholder="*******"
+                    placeholder="*"
                     label="Contraseña: *"
                     onChange={({ nativeEvent: { text } }) => setPassword(text)}
                     labelStyle={styles.label}
@@ -108,15 +130,15 @@ export default function CreateAccount(props){
                     rightIcon={
                         <Icon
                             type="material-community"
-                             name={showPassword ? 'eye-outline' : 'eye-off-outline'}
+                            name={showPassword ? 'eye-outline' : 'eye-off-outline'}
                             color='#fff'
                             onPress={() => setShowPassword(!showPassword)}
                         />
                     }
-                    errorMessage={showMessage.password}
+                    errorMessage={showMessage}
                 />
                 <Input
-                    placeholder="*******"
+                    placeholder="*"
                     label="Confirmar contraseña: *"
                     onChange={({ nativeEvent: { text } }) => setConfirmPassword(text)}
                     labelStyle={styles.label}
@@ -131,9 +153,8 @@ export default function CreateAccount(props){
                             onPress={() => setShowPassword(!showPassword)}
                         />
                     }
-                    errorMessage={showMessage.confirmPassword}           
+                    errorMessage={showMessage}           
                 />
-
                 <Button
                     title='Registrarse'
                     onPress={register}
@@ -141,6 +162,7 @@ export default function CreateAccount(props){
                     buttonStyle={styles.buttonStyle}
                     titleStyle={{ color: "black" }}
                 />
+                {showMessage ? <Text style={styles.errorMessage}>{showMessage}</Text> : null}
             </View>
         </ImageBackground>
     );

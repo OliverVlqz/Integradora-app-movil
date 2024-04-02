@@ -69,7 +69,7 @@ export default function HomeStack() {
                         />
                     )
                 }}
-            />
+            />  
 
             <Stack.Screen
                 name='Home'

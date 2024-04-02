@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Image, View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -13,7 +13,7 @@ import HomeStack from '../../modules/stack/HomeStack.jsx'
 import { Icon } from '@rneui/base'
 import Profile from '../auth/adapters/screens/Profile.jsx'
 import Cart from '../cart/Cart.jsx';
-
+import LoginStack from '../../modules/stack/LoginStack.jsx';
 
 const Tab = createBottomTabNavigator();
 
@@ -30,82 +30,86 @@ const CustomHeaderTitle = ({ title }) => {
 };
 
 export default function Navigation() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      const token = await AsyncStorage.getItem('token');
+      setIsLoggedIn(token ? true : false);
+      setIsLoading(false);
+    };
+
+    checkLoginStatus();
+  }, []);
+
+  
+
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            const { iconName, iconType } = getIconName(route.name, focused);
-            // Retornar un Icon de React Native Elements
-            return <Icon name={iconName} type={iconType} size={size} color={color} />;
-          },
-          tabBarActiveTintColor: '#7E8D56',
-          tabBarInactiveTintColor: 'gray',
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: '#7E8D56',
-          },
-        })}
-      >
-
-        <Tab.Screen name="Login"
-          component={Login}
-          options={{ title: "Inicio de sesión", headerShown: false}}
-        />
-
-        <Tab.Screen name='CreateAccount'
-          component={CreateAccount}
-          options={{ title: "Crea tu cuenta", headerShown: false}}
-        />
-
-        <Tab.Screen
-          name="HomeStack"
-          component={HomeStack}
-          options={{
-            headerShown: false,
-            headerTitle: props => <CustomHeaderTitle title="Real del Valle" />,
-            headerTitleAlign: 'center',
-            title: "Inicio"
-          }}
-          
-        />
-         <Tab.Screen
-          name="Cart"
-          component={Cart}
-          options={{
-            title: 'Carrito',
-            headerStyle: {
-                backgroundColor: '#7E8D56'
+      {isLoggedIn ? (
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              const { iconName, iconType } = getIconName(route.name, focused);
+              return <Icon name={iconName} type={iconType} size={size} color={color} />;
             },
-            headerRight: () => (
-                <Image
-                    source={Logo}
-                    style={{ width: 40, height: 30, marginRight: 10 }}
-                />
-            )
-        }}
-        />
-
-        <Tab.Screen
-          name="Profile"
-          component={Profile}
-          options={{
-            title: 'Perfil',
+            tabBarActiveTintColor: '#7E8D56',
+            tabBarInactiveTintColor: 'gray',
+            headerShown: true,
             headerStyle: {
-                backgroundColor: '#7E8D56'
+              backgroundColor: '#7E8D56',
             },
-            headerRight: () => (
-                <Image
-                    source={Logo}
-                    style={{ width: 40, height: 30, marginRight: 10 }}
-                />
-            )
-        }}
-        />
-
-      </Tab.Navigator>
+          })}
+        >
+          <Tab.Screen
+            name="HomeStack"
+            component={HomeStack}
+            options={{
+              headerShown: false,
+              headerTitle: props => <CustomHeaderTitle title="Real del Valle" />,
+              headerTitleAlign: 'center',
+              title: "Inicio"
+            }}
+          />
+          <Tab.Screen
+            name="Cart"
+            component={Cart}
+            options={{
+              title: 'Carrito',
+              headerStyle: {
+                  backgroundColor: '#7E8D56'
+              },
+              headerRight: () => (
+                  <Image
+                      source={Logo}
+                      style={{ width: 40, height: 30, marginRight: 10 }}
+                  />
+              )
+            }}
+          />
+          <Tab.Screen
+            name="Profile"
+            component={Profile}
+            options={{
+              title: 'Perfil',
+              headerStyle: {
+                  backgroundColor: '#7E8D56'
+              },
+              headerRight: () => (
+                  <Image
+                      source={Logo}
+                      style={{ width: 40, height: 30, marginRight: 10 }}
+                  />
+              )
+            }}
+          />
+        </Tab.Navigator>
+      ) : (
+        <LoginStack />
+      )}
     </NavigationContainer>
-  )
+  );
 }
 
 const getIconName = (routeName, focused) => {
@@ -116,10 +120,8 @@ const getIconName = (routeName, focused) => {
     case 'HomeStack':
       iconName = focused ? 'home' : 'home';
       break;
-    case 'CreateAccount':
-      iconName = focused ? 'account' : 'account-outline';
-      break;
-    case 'Login':
+    
+    case 'LoginStack':
       iconName = focused ? 'login' : 'login';
       break;
 

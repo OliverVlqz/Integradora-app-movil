@@ -5,8 +5,6 @@ import Modal from "react-native-modal";
 
 const PayInfo = ({ route, navigation }) => {
   const { cartItems, subtotal, impuestos, total } = route.params;
-  const navigation = useNavigation();
-
 
 // const payment =()=>{
 //   const paymentInfo ={amount: total, date: new Date()};
