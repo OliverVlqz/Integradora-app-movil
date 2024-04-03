@@ -10,6 +10,10 @@ import { Image } from "@rneui/base";
 import { CartFuction } from "./CartFuction";
 import _ from "lodash";
 import { useNavigation } from '@react-navigation/native';
+import axios from "axios";
+
+
+
 
 
 export default function Cart({ route, navigation }) {
@@ -17,71 +21,76 @@ export default function Cart({ route, navigation }) {
   const { cartItems, removeCartItem } = useContext(CartFuction);
   
 
-  
-const calcularSubtotal = () => {
-  let subtotal = 0;
-  cartItems.forEach(item => {
-      const priceNumber = parseFloat(item.price.replace(/[^\d.]/g, ""));
-      if (!isNaN(priceNumber)) {
-          subtotal += item.type === 'restaurant' || item.type === 'miscellaneous'
-              ? item.quantity * priceNumber
-              : priceNumber;
-      }
-  });
-  return subtotal.toFixed(2);
-};
 
+  
+  const calcularSubtotal = () => {
+    let subtotal = 0;
+    cartItems.forEach(item => {
+        if (typeof item.precio === 'number') {
+            subtotal += item.categoria.id_categoria === 2 || item.categoria.id_categoria === 3
+                ? item.quantity * item.precio
+                : item.precio;
+        }
+    });
+    return subtotal.toFixed(2);
+  };
   const calcularTotal = () => {
     const subtotal = parseFloat(calcularSubtotal());
     const impuestos = subtotal * 0.16; 
     return (subtotal + impuestos).toFixed(2);
   };
   
+  
   const renderItem = ({ item }) => {
-    const descriptionSnippet = _.truncate(item.description, {
+    const descriptionSnippet = _.truncate(item.descripcion, {
       length: 48,
       omission: "...",
     });
 
     const calculateTotalPrice = (item) => {
-      if (item.quantity && item.price) {
-        const priceWithoutCurrencySymbol = parseFloat(item.price.slice(1));
-        return (item.quantity * priceWithoutCurrencySymbol).toFixed(2);
+      if (item.quantity && typeof item.precio === 'number') {
+        return (item.quantity * item.precio).toFixed(2);
+      } else {
+        return '0.00'; // Otra acción si el precio o la cantidad no son válidos
       }
-      return '0.00';
     };
     
     const totalPrice = calculateTotalPrice(item, cartItems);
 
-    switch (item.type) {
-      case "room":
+    switch (item.categoria.id_categoria) {
+      case 1:
         return (
           <View style={styles.row}>
-            <Image source={item.image} style={styles.imageCard} />
+            
+            <Image source={item.imagen_elemento} style={styles.imageCard} />
+
             <View>
-              <Text style={styles.t_habitacion}>{item.t_habitacion}</Text>
-              <Text style={styles.t_cama}>{item.t_cama}</Text>
-              <Text style={styles.capacidad}>{item.capacidad}</Text>
-              <Text style={styles.precio}>{item.price}</Text>
-            </View>
-            <TouchableOpacity
+              <Text style={styles.t_habitacion}>{item.nombre_producto}</Text>
+
+              <Text style={styles.textDescription}>{descriptionSnippet}</Text>
+              <Text style={styles.precio}>{item.precio}</Text>
+              <TouchableOpacity
                 style={styles.detailsButton}
                 onPress={() => removeCartItem(item)}
               >
                 <Text style={styles.detailsButtonText}>Eliminar</Text>
               </TouchableOpacity>
+            </View>
+            
           </View>
         );
-      case "restaurant":
-        return (
+
+      case 2:
+         return (
           <View style={styles.row}>
-            <Image source={item.img} style={styles.imageCard} />
+             <Image source={item.imagen_elemento} style={styles.imageCard} /> 
+            
 
             <View>
-              <Text style={styles.t_habitacion}>{item.title}</Text>
+              <Text style={styles.t_habitacion}>{item.nombre_producto}</Text>
 
               <Text style={styles.textDescription}>{descriptionSnippet}</Text>
-              {/* <Text style={styles.precio}>{item.price}</Text> */}
+             
 
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Text style={styles.precio}>Cantidad: {item.quantity} </Text>
@@ -99,28 +108,28 @@ const calcularSubtotal = () => {
             </View>
           </View>
         );
-      case "spa":
+      case 3:
         return (
           <View style={styles.row}>
-            
-            <Image source={item.image} style={styles.imageCard} />
+                        <Image source={item.imagen_elemento} style={styles.imageCard} />
 
             <View>
-              <Text style={styles.t_habitacion}>{item.title}</Text>
-
-              <Text style={styles.textDescription}>{descriptionSnippet}</Text>
-              <Text style={styles.precio}>{item.price}</Text>
-              <TouchableOpacity
+              <Text style={styles.t_habitacion}>{item.nombre_producto}</Text>
+              {/* <Text style={styles.t_cama}>{item.price}</Text> */}
+            </View>
+            <Text style={styles.precio}>Cantidad: {item.quantity} </Text>
+                <Text style={styles.precio}>
+                  Precio Total: ${calculateTotalPrice(item) }
+                </Text>
+                <TouchableOpacity
                 style={styles.detailsButton}
                 onPress={() => removeCartItem(item)}
               >
                 <Text style={styles.detailsButtonText}>Eliminar</Text>
               </TouchableOpacity>
-            </View>
-            
           </View>
         );
-      case "miscellaneous":
+      case 4:
         return (
           <View style={styles.row}>
                         <Image source={item.img} style={styles.imageCard} />
@@ -194,6 +203,7 @@ const calcularSubtotal = () => {
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

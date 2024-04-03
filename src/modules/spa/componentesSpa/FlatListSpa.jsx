@@ -3,21 +3,21 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Image } from '@rneui/base';
 
 export default function FlatListSpa(props) {
-    const {id, title, description, price, image, customAction, action} = props;
+    const {id, nombre_producto, descripcion, precio, imagen_elemento, customAction, action} = props;
     return (
         <View style={styles.row}>
             <Image
-                source={image}
+                source={imagen_elemento}
                 style={styles.imageCard}
             />
             <View style={{ flex: 1, flexDirection: 'column', marginLeft: 8, alignItems: 'center' }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text style={styles.title}>{title}</Text>
+                    <Text style={styles.title}>{nombre_producto}</Text>
                 </View>
 
                 <View style={styles.descriptionContainer}>
-                    <Text style={styles.description}>{description}</Text>
-                    <Text style={styles.description}>{price}</Text>
+                    <Text style={styles.description}>{descripcion}</Text>
+                    <Text style={styles.description}>{precio}</Text>
                 </View>
 
                 <View style={{ flexDirection: 'row' }}>

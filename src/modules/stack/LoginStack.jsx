@@ -6,35 +6,36 @@ import CreateAccount from '../auth/adapters/screens/CreateAccount'
 import HomeStack from './HomeStack'
 import Navigation from '../navigation/Navigation'
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator()
 
 export default function LoginStack() {
-    return (
-        <Stack.Navigator initialRouteName='Login'>
-          <Stack.Screen
-            name='Login'
-            component={Login}
-            options={{
-              title: 'Login',
-              headerShown: false,
-            }}
-          />
-           <Stack.Screen
-            name='CreateAccount'
-            component={CreateAccount}
-            options={{
-              title: 'Create Account',
-              headerShown: false,
-            }}
-          />
-           <Stack.Screen
-            name='HomeStack'
-            component={HomeStack}
-            options={{
-              title: 'Create Account',
-              headerShown: false,
-            }}
-          />
-        </Stack.Navigator>
-      )
-        }
+  return (
+    <Stack.Navigator initialRouteName='Login'>
+      <Stack.Screen
+        name='Login'
+        component={Login}
+        options={{
+          title: 'Login',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name='CreateAccount'
+        component={CreateAccount}
+        options={{
+          title: 'Create Account',
+          headerShown: false,
+        }}
+      />
+      
+      <Stack.Screen
+        name='Navigation'
+        component={Navigation}
+        options={{
+          title: 'Create Account',
+          headerShown: false,
+        }}
+      />
+    </Stack.Navigator>
+  )
+}

@@ -1,102 +1,76 @@
 import { Text, View, StyleSheet, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Image } from '@rneui/base';
 import Comida from "../../../assets/restaurante.jpg"
 import { FlatList } from 'react-native-gesture-handler';
 import FlatListRestaurant from './componentesRest/FlatListRestaurant';
 import {CartFuction} from '../cart/CartFuction';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const { height } = Dimensions.get('window');
 
 export default function Restaurant(props) {
     const {navigation} = props;
+
+    const [elements, setElements] = useState([]);
+
     const { cartItems, addItemToCart, updateCartItem } = useContext(CartFuction); 
 
-    const agregarCarrito = (item, quantity) => {
-        const itemIndex = cartItems.findIndex(cartItem => cartItem.id === item.id);
-        if (itemIndex !== -1) {
-            const updatedCartItems = [...cartItems];
-            updatedCartItems[itemIndex].quantity += quantity;
-            updateCartItem(updatedCartItems[itemIndex]); 
-        } else {
-            addItemToCart({ ...item, quantity });
-        }
-        navigation.navigate('Cart');
-    };
-
+                    const agregarCarrito = (item, quantity) => {
+                        const itemIndex = cartItems.findIndex(cartItem => cartItem.id === item.id);
+                        if (itemIndex !== -1) {
+                            const updatedCartItems = [...cartItems];
+                            updatedCartItems[itemIndex].quantity += quantity;
+                            updateCartItem(updatedCartItems[itemIndex]); 
+                        } else {
+                            addItemToCart({ ...item, quantity });
+                        }
+                        navigation.navigate('Cart');
+                    };
+    useEffect(() => {
+        const fetchElements = async () => {
+            try {
+                const token = await AsyncStorage.getItem('token');
+                console.log('Token:', token);
+                const response = await axios.get('http://192.168.1.76:8080/api/elemento/', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
     
-
-
-const data =[
-    {
-        type: 'restaurant',
-        id: '1R',
-        title: 'Bacalao',
-        description: 'Bacalao en su salsa a la vizcaína, acompañado de esponjosito arroz blanco con verduras.',
-        price: "$120.00",
-        img: require('../../../assets/restaurante.jpg'),    
-        action: () => navigation.navigate('RestaurantDetail',
-        {
-            id: '1R',
-            title: 'Bacalao',
-            description: 'Nuestra Cazuela de Bacalao presenta el bacalao en su salsa a la vizcaína, acompañado de esponjosito arroz blanco con verduras.',
-            img: require('../../../assets/restaurante.jpg')
-        }),
-    },
-    {
-        type: 'restaurant',
-        id: '2R',
-        title: 'Hamburguesa',
-        description: 'Nuestra Cazuela de Bacalao presenta el bacalao en su salsa a la vizcaína, acompañado de esponjosito arroz blanco con verduras.',
-        price: "$120.00",
-        img: require('../../../assets/restaurante.jpg'),
-        action: () => navigation.navigate('RestaurantDetail',
-        {
-            id: '2R',
-            title: 'Hamburguesa',
-            description: 'Nuestra Cazuela de Bacalao presenta el bacalao en su salsa a la vizcaína, acompañado de esponjosito arroz blanco con verduras.',
-            img: require('../../../assets/restaurante.jpg')
-        }),
-    },
-    {
-        type: 'restaurant',
-        id: '3R',
-        title: 'Enchiladas',
-        description: 'Nuestra Cazuela de Bacalao presenta el bacalao en su salsa a la vizcaína, acompañado de esponjosito arroz blanco con verduras.',
-        price: "$120.00",
-        img: require('../../../assets/restaurante.jpg'),
-        action: () => navigation.navigate('RestaurantDetail',
-        {
-            id: '3R',
-            title: 'Enchiladas',
-            description: 'Nuestra Cazuela de Bacalao presenta el bacalao en su salsa a la vizcaína, acompañado de esponjosito arroz blanco con verduras.',
-            img: require('../../../assets/restaurante.jpg')
-        }),
-    },
-    {
-        type: 'restaurant',
-        id: '4R',
-        title: 'Pozole',
-        description: 'Nuestra Cazuela de Bacalao presenta el bacalao en su salsa a la vizcaína, acompañado de esponjosito arroz blanco con verduras.',
-        price: "$120.00",
-        img: require('../../../assets/restaurante.jpg'),
-        action: () => navigation.navigate('RestaurantDetail',
-        {
-            id: '4R',
-            title: 'Pozole',
-            description: 'Nuestra Cazuela de Bacalao presenta el bacalao en su salsa a la vizcaína, acompañado de esponjosito arroz blanco con verduras.',
-            img: require('../../../assets/restaurante.jpg') 
-        }),
-        }
-]
-
+                console.log('Response:', response);
+    
+                if (response && response.status === 200 && response.data && response.data.data && Array.isArray(response.data.data)) {
+                    console.log('Data received:', response.data.data);
+                    
+    
+                    // Filtrar elementos con categoria_id igual a 2
+                    const filteredData = response.data.data.filter(item => item.categoria.id_categoria === 2);
+                    
+                    setElements(filteredData);
+                    
+                    console.log('Filtered Elements:', filteredData);
+                } else {
+                    console.error('Error: No se recibieron datos válidos del servidor.');
+                }
+            } catch (error) {
+                console.error('Error fetching elements:', error);
+            }
+        };
+    
+        fetchElements();
+    }, []);
+    
+    
+    
     
 
     return (
         <View style={styles.container}>
             <View style={styles.imageContainer}>
                 <Image
-                    source={Comida}
+                    source={require('../../../assets/restaurante.jpg')}
                     style={styles.image}
                     resizeMode="cover"
                 />
@@ -106,23 +80,23 @@ const data =[
             </View>
 
             <FlatList
-                data={data}
+                data={elements}
                 renderItem={({item}) =>( 
                 <FlatListRestaurant 
-                    title={item.title}
-                    description={item.description}
-                    price={item.price}
-                    image={item.img}
+                    nombre_producto={item.nombre_producto}
+                    descripcion={item.descripcion}
+                    precio={`$${item.precio}`}
+                    imagen_elemento={{uri: item.imagen_elemento}}
                     action={() => item.action()}
-                    customAction={(quantity) => agregarCarrito(item, quantity)} 
-                   // isRestaurant={item.isRestaurant}
+                    customAction={(quantity) => agregarCarrito(item, quantity)}
+                    navigation={navigation}
 
                    
                 />)}
-                keyExtractor={item => item.id}
+                keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
                 style = {[styles.scrollView, {paddingHorizontal: 12}]}
             />
-            </View>
+        </View>
     );
 }
 
@@ -149,7 +123,4 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: 'white',
     },
-   
-
 });
-

@@ -4,64 +4,59 @@ import { Input, Button, Image, Icon } from "@rneui/base"
 import Fondo from '../../../../../assets/hotel.jpg'
 import Logo from '../../../../../assets/Logo.png'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
-
-
-
-import { isEmpty } from 'lodash';
 import axios from "axios";
+import { useNavigation } from '@react-navigation/native'; 
 
-export default function Login(props) {
-    //const { navigation } = props;
+export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(true);
     const [showMessage, setShowMessage] = useState('');
-    const navigation = useNavigation();
-
-   
-
-    const login =() => {
-        if (!isEmpty(email) && !isEmpty(password)) {
-            setShowMessage("");
-            enviarDatos(email,password)
-        } else {
-            setShowMessage('Campo obligatorio')
-        }
-    }
-    const enviarDatos = async (email, password) => {
-        const url = 'http://192.168.0.10:8080/api/auth/signin';
-        const data = {
-            correo: email,
-            contrasena: password
-        };
+    const navigation = useNavigation(); 
     
+    const setIsAuthenticated = async (value) => {
         try {
-            const response = await axios.post(url, data, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-    
-            if (!response.data) {
-                throw new Error('No se recibieron datos del servidor');
-            }
-    
-            const token = response.data.data.token;
-            console.log('Token recibido:', token);
-            
-    
-            await AsyncStorage.setItem('token', `Bearer ${token}`);
-    
-
+            await AsyncStorage.setItem('isAuthenticated', value.toString());
         } catch (error) {
-            console.error('Error:', error.message);
+            console.error('Error al establecer el estado de autenticación:', error);
         }
     };
-    
-    
-      
-    
+
+    const login = async () => {
+        if (email && password) {
+            setShowMessage("");
+            try {
+                const url = 'http://192.168.1.76:8080/api/auth/signin';
+                const data = {
+                    correo: email,
+                    contrasena: password
+                };
+
+                const response = await axios.post(url, data, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.data) {
+                    throw new Error('No se recibieron datos del servidor');
+                }
+
+                const token = response.data.data.token;
+                console.log('Token recibido:', token);
+
+                await AsyncStorage.setItem('token', `Bearer ${token}`);
+                setIsAuthenticated(true); // Establecer el estado de autenticación como verdadero después de iniciar sesión
+                navigation.navigate('Navigation'); // Redirigir al usuario al Navigation principal
+            
+            } catch (error) {
+                console.error('Error:', error.message);
+            }
+        } else {
+            setShowMessage('Campo obligatorio');
+        }
+    };
+
     return (
         <ImageBackground source={Fondo} style={styles.background}>
             <View style={styles.container}>
@@ -77,7 +72,7 @@ export default function Login(props) {
                     onChange={({ nativeEvent: { text } }) => setEmail(text)}
                     labelStyle={styles.label}
                     containerStyle={styles.input}
-                    inputStyle={{ color: '#fff' }} // Establece el color del texto escrito
+                    inputStyle={{ color: '#fff' }}
                     errorMessage={showMessage}
                     rightIcon={
                         <Icon
@@ -94,7 +89,7 @@ export default function Login(props) {
                     onChange={({ nativeEvent: { text } }) => setPassword(text)}
                     labelStyle={styles.label}
                     containerStyle={styles.input}
-                    inputStyle={{ color: '#fff' }} // Establece el color del texto escrito
+                    inputStyle={{ color: '#fff' }}
                     secureTextEntry={showPassword}
                     errorMessage={showMessage}
                     rightIcon={
@@ -116,10 +111,10 @@ export default function Login(props) {
                 />
 
                 <Button
-                    title='Registrate'
+                    title='Regístrate'
                     type="clear"
-                    onPress={() => navigation.navigate('CreateAccount', { screen: 'CreateAccount' })}
-                    />
+                    onPress={() => navigation.navigate('CreateAccount')}
+                />
             </View>
         </ImageBackground>
     );

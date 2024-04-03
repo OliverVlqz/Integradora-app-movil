@@ -12,8 +12,6 @@ const { height } = Dimensions.get('window')
 export default function Rooms(props) {
     const {navigation} = props;
    const { cartItems, addItemToCart } = useContext(CartFuction);
-
-    
     const agregarCarrito = (item) => {
         addItemToCart(item);
         navigation.navigate('Cart');

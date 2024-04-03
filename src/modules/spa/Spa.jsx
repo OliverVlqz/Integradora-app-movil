@@ -1,9 +1,11 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { View, StyleSheet, Dimensions, FlatList, Text } from 'react-native';
 import { Image } from '@rneui/base';
 import Hotel from "../../../assets/spa.jpg";
 import FlatListSpa from "./componentesSpa/FlatListSpa"
 import {CartFuction} from '../cart/CartFuction';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const { height } = Dimensions.get('window');
 
@@ -12,49 +14,47 @@ const { height } = Dimensions.get('window');
 export default function Spa(props) {
     const {navigation} = props;
     const { cartItems, addItemToCart } = useContext(CartFuction);
-
-
-    
     const agregarCarrito = (item) => {
         addItemToCart(item);
-        navigation.navigate('Cart');
+        navigation.navigate('Cart', { cartItems: [...cartItems, item] });
       };
+      const [elements, setElements] = useState([]);
 
 
-const data = [
-    {
-        type:'spa',
-        id: '1S',
-        title: 'Body Sculpt',
-        description: '3 masajes reductivos',
-        price: '$1,549.00 MXN',
-        image: require('../../../assets/spa.jpg'),
-    },
-    {
-        type:'spa',
-        id: '2S',
-        title: 'Renovación Deluxe',
-        description: '3 drenajes linfáticos',
-        price: '$1,629.00 MXN',
-        image: require('../../../assets/spa.jpg'),
-    },
-    {
-        type:'spa',
-        id: '3S',
-        title: 'Masaje en Pareja',
-        description: '+ Infusión relajante + Aromaterapia',
-        price: '$1,869.00 MXN',
-        image: require('../../../assets/spa.jpg'),
-    },
-    {
-        type:'spa',
-        id: '4S',
-        title: 'Golden',
-        description: '+ Relajante holístico + Relajante sueco',
-        price: '$1,429.00 MXN',
-        image: require('../../../assets/spa.jpg'),
-    },
-];
+      useEffect(() => {
+        const fetchElements = async () => {
+            try {
+                const token = await AsyncStorage.getItem('token');
+                console.log('Token:', token);
+                const response = await axios.get('http://192.168.1.76:8080/api/elemento/', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+    
+                console.log('Response:', response);
+    
+                if (response && response.status === 200 && response.data && response.data.data && Array.isArray(response.data.data)) {
+                    console.log('Data received:', response.data.data);
+    
+                    // Filtrar elementos con categoria_id igual a 2
+                    const filteredData = response.data.data.filter(item => item.categoria.id_categoria === 1);
+    
+                    setElements(filteredData);
+                    console.log('Filtered Elements:', filteredData);
+                } else {
+                    console.error('Error: No se recibieron datos válidos del servidor.');
+                }
+            } catch (error) {
+                console.error('Error fetching elements:', error);
+            }
+        };
+    
+        fetchElements();
+    }, []);
+    
+    
+
     return (
         <View style={styles.container}>
             <View style={styles.imageContainer}>
@@ -67,21 +67,20 @@ const data = [
                     <Text style={styles.text}>Paquetes Spa</Text>
                 </View>
             </View>
-
             <FlatList
-                data={data}
+                data={elements}
                 renderItem={({ item }) => (
                 <FlatListSpa 
-                    title={item.title}
-                    description={item.description}
-                    price={item.price}
-                    image={item.image}
+                    nombre_producto={item.nombre_producto}
+                    descripcion={item.descripcion}
+                    precio={`$${item.precio}`}
+                    imagen_elemento={{uri: item.imagen_elemento}}
                     action={() => item.action()}
                     customAction={() => agregarCarrito(item)}
                     /> )}
                 
-                keyExtractor={item => item.id}
-                style={[styles.scrollView, { paddingHorizontal: 12 }]}
+                    keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
+                    style={[styles.scrollView, { paddingHorizontal: 12 }]}
             />
         </View>
     );

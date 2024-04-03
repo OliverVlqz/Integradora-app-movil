@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Dimensions, TouchableOpacity, ScrollView, FlatList } from 'react-native'
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Image } from '@rneui/base'
 import Miscelaneos from '../../../assets/miscelaneos.jpg'
 import FlatListMiscellaneous from './componentesMisce/FlatListMiscellaneous';
@@ -25,52 +25,40 @@ export default function Miscellaneous(props) {
         navigation.navigate('Cart');
     };
 
-
-      const data = [
-        {
-            type: 'miscellaneous',
-            id: '1M', 
-            title: 'Jabón de baño',
-            price: '$30.00',
-            img: require('../../../assets/miscelaneos.jpg'),    
-        },
-        {
-            type: 'miscellaneous',
-            id: '2M', 
-            title: 'Champú',
-            price: '$30.00',
-            img: require('../../../assets/miscelaneos.jpg'),
-        },
-        {
-            type: 'miscellaneous',
-            id: '3M', 
-            title: 'Crema corporal',
-            price: '$30.00',
-            img: require('../../../assets/miscelaneos.jpg'),
-        },
-        {
-            type: 'miscellaneous',
-            id: '4M', 
-            title: 'Cepillo de dientes',
-            price: '$30.00',
-            img: require('../../../assets/miscelaneos.jpg'),
-        },
-        {
-            type: 'miscellaneous',
-            id: '5M', 
-            title: 'Crema para afeitar',
-            price: '$30.00',
-            img: require('../../../assets/miscelaneos.jpg'),
-        },
-        {
-            type: 'miscellaneous',
-            id: '6M', 
-            title: 'Cepillo para cabello',
-            price: '$30.00',
-            img: require('../../../assets/miscelaneos.jpg'),
-        },
-    ]
-
+    const [elements, setElements] = useState([]);
+    useEffect(() => {
+        const fetchElements = async () => {
+            try {
+                const token = await AsyncStorage.getItem('token');
+                console.log('Token:', token);
+                const response = await axios.get('http://192.168.1.76:8080/api/elemento/', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+    
+                console.log('Response:', response);
+    
+                if (response && response.status === 200 && response.data && response.data.data && Array.isArray(response.data.data)) {
+                    console.log('Data received:', response.data.data);
+    
+                    // Filtrar elementos con categoria_id igual a 2
+                    const filteredData = response.data.data.filter(item => item.categoria.id_categoria === 3);
+    
+                    setElements(filteredData);
+                    console.log('Filtered Elements:', filteredData);
+                } else {
+                    console.error('Error: No se recibieron datos válidos del servidor.');
+                }
+            } catch (error) {
+                console.error('Error fetching elements:', error);
+            }
+        };
+    
+        fetchElements();
+    }, []);
+    
+    
     
     return (
         <View style={styles.container}>
@@ -85,17 +73,17 @@ export default function Miscellaneous(props) {
                 </View>
             </View>
             <FlatList
-                data={data}
+                data={elements}
                 renderItem={({item}) =>(
                     <FlatListMiscellaneous
-                        title={item.title}
-                        price={item.price}
-                        image={item.img}
+                        nombre_producto={item.nombre_producto}
+                        precio={item.precio}
+                        imagen_elemento={item.imagen_elemento}
                         action={() => item.action()}
                         customAction={(quantity) => agregarCarrito(item, quantity)} 
                     />
                 )}
-                keyExtractor={item => item.id}
+                keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
                 style = {[styles.scrollView, {paddingHorizontal: 12}]}
                 
             />
