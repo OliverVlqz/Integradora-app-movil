@@ -4,7 +4,6 @@ import { Image } from '@rneui/base';
 import Comida from "../../../assets/restaurante.jpg"
 import { FlatList } from 'react-native-gesture-handler';
 import FlatListRestaurant from './componentesRest/FlatListRestaurant';
-import {CartFuction} from '../cart/CartFuction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
@@ -15,19 +14,7 @@ export default function Restaurant(props) {
 
     const [elements, setElements] = useState([]);
 
-    const { cartItems, addItemToCart, updateCartItem } = useContext(CartFuction); 
-
-                    const agregarCarrito = (item, quantity) => {
-                        const itemIndex = cartItems.findIndex(cartItem => cartItem.id === item.id);
-                        if (itemIndex !== -1) {
-                            const updatedCartItems = [...cartItems];
-                            updatedCartItems[itemIndex].quantity += quantity;
-                            updateCartItem(updatedCartItems[itemIndex]); 
-                        } else {
-                            addItemToCart({ ...item, quantity });
-                        }
-                        navigation.navigate('Cart');
-                    };
+    
     useEffect(() => {
         const fetchElements = async () => {
             try {
@@ -39,7 +26,7 @@ export default function Restaurant(props) {
                     }
                 });
     
-                console.log('Response:', response);
+                    console.log('Response:', response);
     
                 if (response && response.status === 200 && response.data && response.data.data && Array.isArray(response.data.data)) {
                     console.log('Data received:', response.data.data);
@@ -88,7 +75,7 @@ export default function Restaurant(props) {
                     precio={`$${item.precio}`}
                     imagen_elemento={{uri: item.imagen_elemento}}
                     action={() => item.action()}
-                    customAction={(quantity) => agregarCarrito(item, quantity)}
+                    customAction={() => item.action()}
                     navigation={navigation}
 
                    

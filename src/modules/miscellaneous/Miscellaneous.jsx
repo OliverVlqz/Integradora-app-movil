@@ -3,7 +3,6 @@ import React, { useContext, useState, useEffect } from 'react';
 import { Image } from '@rneui/base'
 import Miscelaneos from '../../../assets/miscelaneos.jpg'
 import FlatListMiscellaneous from './componentesMisce/FlatListMiscellaneous';
-import {CartFuction} from '../cart/CartFuction';
 const { height } = Dimensions.get('window');
 
 
@@ -11,19 +10,8 @@ const { height } = Dimensions.get('window');
 
 export default function Miscellaneous(props) {
     const {navigation} = props;
-    const { cartItems, addItemToCart, updateCartItem } = useContext(CartFuction); 
 
-    const agregarCarrito = (item, quantity) => {
-        const itemIndex = cartItems.findIndex(cartItem => cartItem.id === item.id);
-        if (itemIndex !== -1) {
-            const updatedCartItems = [...cartItems];
-            updatedCartItems[itemIndex].quantity += quantity;
-            updateCartItem(updatedCartItems[itemIndex]); 
-        } else {
-            addItemToCart({ ...item, quantity });
-        }
-        navigation.navigate('Cart');
-    };
+    
 
     const [elements, setElements] = useState([]);
     useEffect(() => {
@@ -32,6 +20,7 @@ export default function Miscellaneous(props) {
                 const token = await AsyncStorage.getItem('token');
                 console.log('Token:', token);
                 const response = await axios.get('http://192.168.1.76:8080/api/elemento/', {
+                    
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -42,7 +31,7 @@ export default function Miscellaneous(props) {
                 if (response && response.status === 200 && response.data && response.data.data && Array.isArray(response.data.data)) {
                     console.log('Data received:', response.data.data);
     
-                    // Filtrar elementos con categoria_id igual a 2
+                    // categoria_id igual a 2
                     const filteredData = response.data.data.filter(item => item.categoria.id_categoria === 3);
     
                     setElements(filteredData);

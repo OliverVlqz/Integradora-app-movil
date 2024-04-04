@@ -4,7 +4,6 @@ import { createStackNavigator } from '@react-navigation/stack'
 import Login from '../auth/adapters/screens/Login'
 import CreateAccount from '../auth/adapters/screens/CreateAccount'
 import HomeStack from './HomeStack'
-import Navigation from '../navigation/Navigation'
 
 const Stack = createStackNavigator()
 
@@ -14,7 +13,8 @@ export default function LoginStack() {
       <Stack.Screen
         name='Login'
         component={Login}
-        options={{
+        options={
+          {
           title: 'Login',
           headerShown: false,
         }}
@@ -27,15 +27,7 @@ export default function LoginStack() {
           headerShown: false,
         }}
       />
-      
-      <Stack.Screen
-        name='Navigation'
-        component={Navigation}
-        options={{
-          title: 'Create Account',
-          headerShown: false,
-        }}
-      />
+     
     </Stack.Navigator>
   )
 }

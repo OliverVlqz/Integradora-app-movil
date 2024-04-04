@@ -3,17 +3,16 @@ import { View, StyleSheet, ImageBackground } from 'react-native';
 import { Input, Button, Image, Icon } from "@rneui/base"
 import Fondo from '../../../../../assets/hotel.jpg'
 import Logo from '../../../../../assets/Logo.png'
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
 import { useNavigation } from '@react-navigation/native'; 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function Login() {
+export default function Login(props) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(true);
     const [showMessage, setShowMessage] = useState('');
-    const navigation = useNavigation(); 
-    
+    const { navigation } = props;     
     const setIsAuthenticated = async (value) => {
         try {
             await AsyncStorage.setItem('isAuthenticated', value.toString());
@@ -26,7 +25,9 @@ export default function Login() {
         if (email && password) {
             setShowMessage("");
             try {
-                const url = 'http://192.168.1.76:8080/api/auth/signin';
+                const url = 'http://192.168.0.10:8080/api/auth/signin';
+                //const url = 'http:// 192.168.1.76:8080/api/auth/signin';
+
                 const data = {
                     correo: email,
                     contrasena: password
@@ -46,8 +47,8 @@ export default function Login() {
                 console.log('Token recibido:', token);
 
                 await AsyncStorage.setItem('token', `Bearer ${token}`);
-                setIsAuthenticated(true); // Establecer el estado de autenticación como verdadero después de iniciar sesión
-                navigation.navigate('Navigation'); // Redirigir al usuario al Navigation principal
+                setIsAuthenticated(true); 
+                navigation.navigate('UserLogged'); 
             
             } catch (error) {
                 console.error('Error:', error.message);
@@ -113,8 +114,8 @@ export default function Login() {
                 <Button
                     title='Regístrate'
                     type="clear"
-                    onPress={() => navigation.navigate('CreateAccount')}
-                />
+                    onPress={() => navigation.navigate("CreateAccount")}
+                    />
             </View>
         </ImageBackground>
     );

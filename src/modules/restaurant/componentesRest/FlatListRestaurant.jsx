@@ -3,7 +3,7 @@ import React, {useState} from 'react'
 import { Image } from '@rneui/base'
 
 export default function FlatListRestaurant(props) {
-    const {id, nombre_producto, descripcion, precio, imagen_elemento, action, customAction, isRestaurant} = props;
+    const {id, nombre_producto, descripcion, precio, imagen_elemento, action, customAction} = props;
     const [quantity, setQuantity] = useState(1);
 
     const increaseQuantity = () => {

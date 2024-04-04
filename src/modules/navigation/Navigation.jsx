@@ -1,24 +1,23 @@
 import React from 'react';
 import { Image, View, Text } from 'react-native';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Login from "../auth/adapters/screens/Login";
 import CreateAccount from "../auth/adapters/screens/CreateAccount";
-import Home from "../../modules/home/Home.jsx"
-import Restaurant from "../../modules/restaurant/Restaurant.jsx"
-import Spa from "../../modules/spa/Spa.jsx"
-import Rooms from "../../modules/rooms/Rooms.jsx"
 import Logo from "../../../assets/Logo.png"
 import HomeStack from '../../modules/stack/HomeStack.jsx'
 import { Icon } from '@rneui/base'
 import Profile from '../auth/adapters/screens/Profile.jsx'
-
-
+import AuthStack from '../../modules/stack/AuthStack.jsx'
+import LoginStack from '../stack/LoginStack.jsx';
+import UserLogged from '../auth/adapters/screens/UserLogged.jsx';
 
 const Tab = createBottomTabNavigator();
 
 const CustomHeaderTitle = ({ title }) => {
+
   return (
+
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
       <Image
         source={Logo}
@@ -31,12 +30,14 @@ const CustomHeaderTitle = ({ title }) => {
 
 export default function Navigation() {
   return (
+    <NavigationContainer>
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             const { iconName, iconType } = getIconName(route.name, focused);
             // Retornar un Icon de React Native Elements
             return <Icon name={iconName} type={iconType} size={size} color={color} />;
+            console.log('navegacion bien');
           },
           tabBarActiveTintColor: '#7E8D56',
           tabBarInactiveTintColor: 'gray',
@@ -47,23 +48,27 @@ export default function Navigation() {
         })}
       >
 
-      
+
         <Tab.Screen
-          name="HomeStack"
-          component={HomeStack}
+          name="LoginStack"
+          component={LoginStack}
           options={{
             headerShown: false,
-            headerTitle: props => <CustomHeaderTitle title="Real del Valle" />,
+            headerTitle: props => {
+              console.log('navegacion bien');
+              <CustomHeaderTitle title="Real del Valle" />
+            },
             headerTitleAlign: 'center',
             title: "Inicio"
           }}
         />
 
-        <Tab.Screen
-          name="Profile"
-          component={Profile}
+        {/* <Tab.Screen
+          name="CreateAccount"
+          component={CreateAccount}
           options={{
-            title: 'Perfil',
+            headerShown: false,
+            title: 'Crear Cuenta',
             headerStyle: {
                 backgroundColor: '#7E8D56'
             },
@@ -74,9 +79,20 @@ export default function Navigation() {
                 />
             )
         }}
+        /> */}
+        <Tab.Screen
+          name="AuthStack"
+          component={AuthStack}
+          options={{
+            headerShown: false,
+            headerTitle: props => <CustomHeaderTitle title="Real del Valle" />,
+            headerTitleAlign: 'center',
+            title: "Cuenta"
+          }}
         />
 
       </Tab.Navigator>
+    </NavigationContainer>
   )
 }
 
@@ -85,13 +101,16 @@ const getIconName = (routeName, focused) => {
   let iconType = 'material-community';
 
   switch (routeName) {
-    case 'HomeStack':
-      iconName = focused ? 'home' : 'home';
+    case 'LoginStack':
+      iconName = focused ? 'login' : 'login';
       break;
-    case 'Profile':
+    case 'CreateAccount':
+      iconName = focused ? 'account' : 'account-outline';
+      break;
+    case 'AuthStack':
       iconName = focused ? 'account-circle' : 'account-circle';
       break;
   }
 
-  return { iconName, iconType };
+  return { iconName, iconType };
 };

@@ -3,7 +3,6 @@ import { View, StyleSheet, Dimensions, FlatList, Text } from 'react-native';
 import { Image } from '@rneui/base';
 import Hotel from "../../../assets/spa.jpg";
 import FlatListSpa from "./componentesSpa/FlatListSpa"
-import {CartFuction} from '../cart/CartFuction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
@@ -12,13 +11,8 @@ const { height } = Dimensions.get('window');
 
 
 export default function Spa(props) {
-    const {navigation} = props;
-    const { cartItems, addItemToCart } = useContext(CartFuction);
-    const agregarCarrito = (item) => {
-        addItemToCart(item);
-        navigation.navigate('Cart', { cartItems: [...cartItems, item] });
-      };
-      const [elements, setElements] = useState([]);
+    //const {navigation} = props;
+   
 
 
       useEffect(() => {
@@ -76,7 +70,7 @@ export default function Spa(props) {
                     precio={`$${item.precio}`}
                     imagen_elemento={{uri: item.imagen_elemento}}
                     action={() => item.action()}
-                    customAction={() => agregarCarrito(item)}
+                    customAction={() => item.action()}
                     /> )}
                 
                     keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}

@@ -4,18 +4,11 @@ import { Image } from '@rneui/base'
 import { FlatList } from 'react-native-gesture-handler'
 import FlatListRoom from './componentsRoom/FlatListRoom'
 import Habitaciones from "../../../assets/hotel.jpg"
-import {CartFuction} from '../cart/CartFuction';
-
 
 
 const { height } = Dimensions.get('window')
 export default function Rooms(props) {
     const {navigation} = props;
-   const { cartItems, addItemToCart } = useContext(CartFuction);
-    const agregarCarrito = (item) => {
-        addItemToCart(item);
-        navigation.navigate('Cart');
-      };
 
     const data =  [
         {
@@ -35,7 +28,7 @@ export default function Rooms(props) {
             price: '$2.347.00 MXN',
             image: require('../../../assets/hotel.jpg')
         }),
-        customAction: () => navigation.navigate('Cart',
+        customAction: () => navigation.navigate(
         {
             id: '1H',
             t_habitacion: 'Sencilla',
@@ -64,7 +57,7 @@ export default function Rooms(props) {
             price: '$2,849.00 MXN',
             image: require('../../../assets/hotel.jpg')
         }),
-        customAction: () => navigation.navigate('Cart',
+        customAction: () => navigation.navigate(
         {
             id: '2H',
             t_habitacion: 'Junior Suite',
@@ -91,7 +84,7 @@ export default function Rooms(props) {
             price: '$3,482.00 MXN',
             image: require('../../../assets/hotel.jpg')
         }),
-        customAction: () => navigation.navigate('Cart',
+        customAction: () => navigation.navigate(
         {
             id: '3H',
             t_habitacion: 'Senior Suite',
@@ -118,7 +111,7 @@ export default function Rooms(props) {
             price: '$2,850.00 MXN',
             image: require('../../../assets/hotel.jpg')
         }),
-        customAction: () => navigation.navigate('Cart',
+        customAction: () => navigation.navigate(
         {
             id: '4H',
             t_habitacion: 'Master Suite',
@@ -154,9 +147,7 @@ export default function Rooms(props) {
                     price={item.price}
                     image={item.image}
                     action={() => item.action()}
-                    //customAction={() => item.customAction()}
-                    customAction={() => agregarCarrito(item)}
-                    //navigation={navigation} 
+                    customAction={() => (item)}
                     />
             )}
 

@@ -4,7 +4,8 @@
     import Hotel from "../../../assets/hotelAfuera.jpg";
     import { Picker } from '@react-native-picker/picker';
     import DateTimePicker from '@react-native-community/datetimepicker';
-
+    
+    
     const { height, width } = Dimensions.get('window');
 
     export default function Home(props) {
@@ -49,9 +50,6 @@
                 }
             }
         };
-        
-        
-        
         
 
         const showCheckInDatePickerModal = () => {
